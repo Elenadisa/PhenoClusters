@@ -16,7 +16,7 @@ R Markdown.
 **I** Clone this repository. Ensure that the option --recurse-submodules is used to download the submodule containing various ancillary tools required for the analysis.
 
 ``
-git clone https://github.com/Elenadisa/PhenCo --recurse-submodules
+git clone https://github.com/Elenadisa/PhenoClusters --recurse-submodules
 ``
 
 **II** Install [Ruby](https://rvm.io/) We recommend using the RVM manager.  
