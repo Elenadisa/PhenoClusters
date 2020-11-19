@@ -1,0 +1,88 @@
+topolological_analysis){
+	source ~soft_bio_267/initializes/init_R
+	PATH=$current_dir'/scripts/rscripts':$PATH
+	export PATH
+	net_name=`basename $working_net`
+    net_type=`echo $net_name | sed 's/_[0-9]*$//g'`
+	?
+	network_topology_analysis.R -i $working_net -o hpo_frequency > topol_results
+	while read topological_metric
+	do
+        echo -e "$net_name\t$net_type\t$topological_metric" >> ../topological_metrics
+	done < topol_results
+    echo -e "$net_name\t$net_type\ttop_analysis\t`pwd`/hpo_frequency" >> ../topological_metrics
+}
+
+term_pairs_comention_analysis){
+	#Initialize R and python
+	module load python/anaconda-4.7.12
+    source ~soft_bio_267/initializes/init_R
+    PATH=$current_dir'/scripts/py_scripts':$PATH
+	export PATH
+	
+    net_name=`basename $working_net`
+    net_type=`echo $net_name | sed 's/_[0-9]*$//g'`
+    ?
+    
+    get_fisher.R -r $working_net -d $HPO2pubmed -i V2 -e V4 >> pval_table 2> failed_pairs
+    # Write the output file location to metrics
+    echo -e "$net_name\t$net_type\tcomention_analysis\t`pwd`/pval_table" >> ../metrics
+    get_cooccurrent.py  -f pval_table -c 2 -n $net_name -t $net_type -a "" >> ../metrics
+
+}
+
+clustering_analysis){
+	resources: -m 2gb -t '7-00:00:00' -n 'cal'
+	module load python/anaconda-4.7.12
+	source ~soft_bio_267/initializes/init_R
+	PATH=$current_dir'/scripts/rscripts':$PATH
+	PATH=$current_dir'/scripts/py_scripts':$PATH
+	export PATH
+	net_name=`basename $working_net`
+	net_type=`echo $net_name | sed 's/_[0-9]*$//g'`
+	?
+	clustering.R -i $working_net -n clusters_file -s summary_dendograme.png -d top_connected_node.png -r relationship_between_communities.png -c cytoscape_file -e $net_name'_clusters'
+
+	get_hpo_names.py -d $hpo_dictionary -A 0 -a 1 -l clusters_file -B 0 > clusters_file_with_names
+
+	echo -e "$net_name\t$net_type\tCluster_number\t`cut -f 2 clusters_file | sort -u | wc -l`" >> ../metrics
+	echo -e "$net_name\t$net_type\tHPO_number\t`cut -f 1 clusters_file | sort -u | wc -l`" >> ../metrics
+	calculate_cluster_average.py -c clusters_file -A 1 -B 0 -e  -p  -m $net_type -n $net_name >> ../metrics
+
+	echo -e "$net_name\t$net_type\tfile_clusters_names_$database\t`pwd`/clusters_file_with_names" >> ../metrics
+}
+
+analyse_clusters_[kegg;go;reactome]){
+	module load python/anaconda-3_440
+	PATH=$current_dir'/scripts/py_scripts':$PATH
+	export PATH
+	parsed_p_values=`echo '$p_values' | tr '/' ' '`
+	for PVALUE in $parsed_p_values
+	do
+	?
+		clusters_single_funsys_merger.py -c clustering_analysis)/clusters_file -A 1 -a 0 -x $single_enrichments/nmd_phen2(*)_$PVALUE.txt -B 0 -b 1 -n 2 -g 8 -t 50 -d $all_diseases_data -F 2 -f 1 -e (*) $phen2gene -K 0 -k 1 > clusters_with_50_coherence_systems_(*)_$PVALUE
+		
+		clusters_single_funsys_merger.py -c clustering_analysis)/clusters_file -A 1 -a 0 -x $single_enrichments/nmd_phen2(*)_$PVALUE.txt -B 0 -b 1 -n 2 -g 8 -t 70 -d $all_diseases_data -F 2 -f 1 -e (*) $phen2gene -K 0 -k 1 > clusters_with_70_coherence_systems_(*)_$PVALUE
+		
+	done
+}
+
+unify_clusters_data){
+	
+	net_name=`basename $working_net`
+	net_type=`echo $net_name | sed 's/_[0-9]*$//g'`
+	parsed_p_values=`echo '$p_values' | tr '/' ' '`
+	for PVALUE in $parsed_p_values
+	do
+	?
+		cat !analyse_clusters_!/clusters_with_50_coherence_systems_*_$PVALUE | sort -k1 -n > clusters_with_50_coherence_$PVALUE
+		echo -e "$net_name\t$net_type\tCluster_with_50_coherence_$PVALUE\t`cut -f 1 clusters_with_50_coherence_$PVALUE | sort -u | wc -l`" >> ../metrics
+
+
+		cat !analyse_clusters_!/clusters_with_70_coherence_systems_*_$PVALUE | sort -k1 -n > clusters_with_70_coherence_$PVALUE
+		echo -e "$net_name\t$net_type\tCluster_with_70_coherence_$PVALUE\t`cut -f 1 clusters_with_70_coherence_$PVALUE | sort -u | wc -l`" >> ../metrics
+
+		echo -e "$net_name\t$net_type\tfile_clusters_with_50_coherence_$database_$PVALUE\t`pwd`/clusters_with_50_coherence_$PVALUE" >> ../metrics
+		echo -e "$net_name\t$net_type\tfile_clusters_with_70_coherence_$database_$PVALUE\t`pwd`/clusters_with_70_coherence_$PVALUE" >> ../metrics
+	done
+}
