@@ -1,7 +1,7 @@
 # PhenoClusters Version 1.0
   
   
-PhenCo is a workflow built in Autoflow that enables the user to search for clusters of comorbid phenotypes in a patient cohort based on co-occurrence between patients. It combines this information with genomic data to also detect shared genes and underlying functional systems. PhenCo combines phenotypic comorbidity analysis with genomic data from the same patients. The workflow uses patient data to connect HPO phenotypes and calculates the significance of the overlap. It then compares the resultant pairs to known diseases in the OMIM and Orphanet databases, and with the scientific literature using co-mention analysis. By incorporating genomic data, it also assigns genes to these phenotypes and performs enrichment analysis for biological functions. Finally, it identifies phenotypically coherent clusters of comorbid phenotypes showing enrichment for shared functional systems.
+PhenoCluster is a workflow built in Autoflow that enables the user to search for clusters of co-occurrent phenotypes diseases. It combines this phenotypic and genetic data to also detect shared genes and underlying functional systems. The workflow uses diseases data to connect HPO phenotypes and calculates the significance of the overlap. It then compares the resultant pairs with scientific literature using co-mention analysis. By incorporating genetic data, it also assigns genes to these phenotypes and performs enrichment analysis for biological functions. Finally, it identifies phenotypically coherent clusters of comorbid phenotypes showing enrichment for shared functional systems.
   
 ## Systems Requirements
   
