@@ -1,0 +1,193 @@
+```{r  echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
+  metric_table <- data[['omim_table_metrics.txt']]
+  
+  library(dplyr)
+  library(kableExtra)
+  library(knitr)
+  library(ggplot2)
+  library(igraph)
+
+
+group_cluster_information <- function(df1, df2){
+	clusters <- unique(df1$Cluster_id)
+	cluster_list <- list()
+
+	for (i in clusters){
+		groups <- list()
+		hp_groups <- filter(df1, Cluster_id == clusters[i])
+
+		if (nrow(hp_groups) != 0) {
+			groups[["hpo"]] <- hp_groups
+		}
+		system_groups <- filter(df2, Cluster_id == clusters[i])
+    
+		if (nrow(system_groups) != 0) {
+      system_groups_sorted <- system_groups[order(-system_groups$Phenotype_coverage),]
+			groups[["system"]] <- system_groups_sorted
+			scores <- system_groups$Phenotype_coverage
+          	score <- max(scores)
+          	groups[["coherence_score"]] <- score
+        }else{
+          	groups[["coherence_score"]] <- 0
+        }
+		name <- paste0("Cluster_", i)
+        cluster_list[[name]] <- groups 
+	}
+
+
+	return(cluster_list)
+}
+
+order_a_list_by_vector <- function(lst, field){
+	length_vector <- c()
+
+	for (i in 1:length(lst)){
+		sublst <- lst[[i]]
+		value <- sublst[[field]]
+		length_vector[i] <- value
+	} 
+	ordered_lst <- lst[order(length_vector, decreasing=TRUE)] 
+
+	return(ordered_lst)
+}
+
+delete_parental_terms<- function(df){
+  library(GOSim)
+  library(GO.db)
+  library(dplyr)
+    
+    
+  setOntology(ont = "BP")
+  go_l <- getParents()
+    
+  initial_clusters <- length(unique(df$Cluster_id))
+  
+  clusters_l <- unique(df$Cluster_id)
+  df1 <- data.frame()
+  
+  for(cluster in clusters_l){
+    cluster_subset <- filter(df, Cluster_id == cluster)
+    funsys_l <- cluster_subset$Pathway_id
+    
+    parents_l <- c()
+    if(length(funsys_l) > 1){
+      for(funsys in funsys_l){
+        parents_l <- c(parents_l, go_l[[funsys]])
+      }
+      for(parent in parents_l){
+        if(parent %in% funsys_l){
+          cluster_subset <- (cluster_subset[!cluster_subset$Pathway_id == parent, ])
+        }
+      }
+      df1 <- rbind(df1, cluster_subset)
+    }else{
+      df1 <- rbind(df1, cluster_subset)
+    }
+    
+  }
+  return(df1)
+}
+
+
+```
+
+# Clusters details OMIM
+
+
+```{r  cho=FALSE, warning=FALSE, message=FALSE, results='asis'}
+
+
+clusters_hpo <- read.table("PATH/TO/FILES/neuromuscular_diseases_project/omim_analysed_networks/omim_neuromuscular_pairs/clustering.R_0000/clusters_file_with_names", sep ="\t", quote="", stringsAsFactors = FALSE, header = TRUE)
+if(nrow(clusters_hpo) > 0){
+    for (i in 1:length(clusters_hpo$hpo)){
+      url <- paste0("https://hpo.jax.org/app/browse/term/", clusters_hpo$hpo[i])
+      clusters_hpo$hpo[i] <- text_spec(clusters_hpo$hpo[i], link = url)
+    }
+  }
+  colnames(clusters_hpo) <- c("HPO_id", "Cluster_id", "HPO_name")
+
+
+kegg <- read.table("PATH/TO/FILES/neuromuscular_diseases_project/omim_analysed_networks/omim_neuromuscular_pairs/clusters_single_funsys_merger.py_0000/clusters_with_70_coherence_systems_kegg_0.05", sep ="\t", quote="", stringsAsFactors = FALSE, header = FALSE)
+colnames(kegg) <- c("Cluster_id", "Pathway_id", "Pathway_Name", "Phenotype_coverage", "Genes")
+if(nrow(kegg) > 0){
+    for (i in 1:length(kegg$Pathway_id)){
+      url <- paste0("https://www.genome.jp/dbget-bin/www_bget?pathway+", kegg$Pathway_id[i])
+      kegg$Pathway_id[i] <- text_spec(kegg$Pathway_id[i], link = url)
+    }
+  }
+
+go_df <- read.table("PATH/TO/FILES/neuromuscular_diseases_project/omim_analysed_networks/omim_neuromuscular_pairs/clusters_single_funsys_merger.py_0001/clusters_with_70_coherence_systems_go_0.05", sep ="\t", quote="", stringsAsFactors = FALSE, header = FALSE)
+colnames(go_df) <- c("Cluster_id", "Pathway_id", "Pathway_Name", "Phenotype_coverage", "Genes")
+go <- delete_parental_terms(go_df)
+if(nrow(go) > 0){  
+    for (i in 1:length(go$Pathway_id)){
+      url <- paste0("http://amigo.geneontology.org/amigo/term/", go$Pathway_id[i])
+      go$Pathway_id[i] <- text_spec(go$Pathway_id[i], link = url)
+    }
+  }
+
+reactome <- read.table("PATH/TO/FILES//neuromuscular_diseases_project/omim_analysed_networks/omim_neuromuscular_pairs/clusters_single_funsys_merger.py_0002/clusters_with_70_coherence_systems_reactome_0.05", sep ="\t", quote="", stringsAsFactors = FALSE, header = FALSE)
+colnames(reactome) <- c("Cluster_id", "Pathway_id", "Pathway_Name", "Phenotype_coverage", "Genes")
+if(nrow(reactome) > 0){  
+    for (i in 1:length(reactome$Pathway_id)){
+      url <- paste0("https://reactome.org/content/detail/", reactome$Pathway_id[i])
+      reactome$Pathway_id[i] <- text_spec(reactome$Pathway_id[i], link = url)
+    }
+  }
+
+orpha_clusters_system <- rbind(kegg, go, reactome)
+
+all_clusters_lst <- group_cluster_information(clusters_hpo, orpha_clusters_system)
+
+ordered_cluster_lst <- order_a_list_by_vector(all_clusters_lst, "coherence_score")
+
+
+#clusters_file
+clusters_file_cytoscape <- read.table("PATH/TO/FILES/neuromuscular_diseases_project/omim_analysed_networks/omim_neuromuscular_pairs/clustering.R_0000/cytoscape_file", sep=" ", header=FALSE, quote="", stringsAsFactors = FALSE)
+clusters_file <- clusters_file_cytoscape[,c(1,3,5)]
+colnames(clusters_file) <- c("HPO-A", "HPO-B", "Cluster")
+
+
+for(i in 1:length(ordered_cluster_lst)){
+    list <- ordered_cluster_lst[[i]]
+    cluster_name <- unlist(strsplit(names(ordered_cluster_lst[i]), "_"))
+    cluster_number <- cluster_name[2]
+    if(!is.null(list[["system"]])){
+      cat("_ _ _", "\n", "_ _ _", "\n", "_ _ _", "\n")
+      list["coherence_score"] <- NULL
+      cat("# ", cluster_name, "\n")
+
+      cluster <- subset(clusters_file, Cluster == cluster_number)
+      hpo_names <- subset(clusters_hpo, Cluster_id == cluster_number)
+      g <- graph.data.frame(cluster, directed = FALSE)
+      plot(g, vertex.label=gsub(" ", "\n", hpo_names$HPO_name), vertex.shape="none", vertex.label.cex=c(0.9), vertex.label.color="black")
+
+      for(i in list){
+        print(knitr::kable(i, format="markdown", row.name=FALSE))
+        cat("\n")
+      }
+    }
+  }
+
+for(i in 1:length(ordered_cluster_lst)){
+    list <- ordered_cluster_lst[[i]]
+    cluster_name <- unlist(strsplit(names(ordered_cluster_lst[i]), "_"))
+    cluster_number <- cluster_name[2]
+    if(is.null(list[["system"]])){
+      cat("_ _ _", "\n", "_ _ _", "\n", "_ _ _", "\n")
+      list["coherence_score"] <- NULL
+      cat("# ", cluster_name, "\n")
+
+      cluster <- subset(clusters_file, Cluster == cluster_number)
+      hpo_names <- subset(clusters_hpo, Cluster_id == cluster_number)
+      g <- graph.data.frame(cluster, directed = FALSE)
+      plot(g, vertex.label=gsub(" ", "\n", hpo_names$HPO_name), vertex.shape="none", vertex.label.cex=c(0.9), vertex.label.color="black")
+
+      for(i in list){
+        print(knitr::kable(i, format="markdown", row.name=FALSE))
+        cat("\n")
+      }
+    }
+  }
+
+```

@@ -1,0 +1,531 @@
+
+
+```{r  echo=FALSE, warning=FALSE, message=FALSE, results='asis'}
+  metric_table <- data[['orphanet_table_metrics.txt']]
+
+
+  kegg_metric_table <- read.table("../results/kegg/orpha_kegg_comention_table_metrics.txt", sep ="\t", header = TRUE, stringsAsFactors = FALSE, quote = "")
+  go_metric_table <- read.table("../results/go/orpha_go_comention_table_metrics.txt", sep ="\t", header = TRUE, stringsAsFactors = FALSE, quote = "")
+  reactome_metric_table <- read.table("../results/reactome/orpha_reactome_comention_table_metrics.txt", sep ="\t", header = TRUE, stringsAsFactors = FALSE, quote = "")
+
+  
+  library(dplyr)
+  library(kableExtra)
+  library(knitr)
+  library(ggplot2)
+  library(igraph)
+
+group_cluster_information <- function(df1, df2){
+	clusters <- unique(df1$cluster)
+	cluster_list <- list()
+
+	for (i in clusters){
+		groups <- list()
+		hp_groups <- filter(df1, cluster == clusters[i])
+
+		if (nrow(hp_groups) != 0) {
+			groups[["hpo"]] <- hp_groups
+		}
+		system_groups <- filter(df2, Cluster == clusters[i])
+		if (nrow(system_groups) != 0) {
+			system_groups_sorted <- system_groups[order(-system_groups$Phenotype_percentage),]
+      groups[["system"]] <- system_groups_sorted
+			scores <- system_groups$Phenotype_percentage
+          	score <- max(scores)
+          	groups[["coherence_score"]] <- score
+        }else{
+          	groups[["coherence_score"]] <- 0
+        }
+		name <- paste0("Cluster_", i)
+        cluster_list[[name]] <- groups 
+	}
+
+
+	return(cluster_list)
+}
+
+order_a_list_by_vector <- function(lst, field){
+	length_vector <- c()
+
+	for (i in 1:length(lst)){
+		sublst <- lst[[i]]
+		value <- sublst[[field]]
+		length_vector[i] <- value
+	} 
+	ordered_lst <- lst[order(length_vector, decreasing=TRUE)] 
+
+	return(ordered_lst)
+}
+
+
+produce_barplot_comention_kegg <- function(column, title, ylab){
+  data_frame <- summarySE(kegg_metric_table, measurevar=column, groupvars=c("Type"))
+    
+  plt <- ggplot(data_frame, aes(x=Type, y=get(column), fill=Type)) 
+  plt <- plt + geom_bar(stat="identity")
+  plt <- plt + geom_errorbar(aes(ymin=get(column)-sd, ymax=get(column)+sd),
+                  width=.2,                    # Width of the error bars
+                  position=position_dodge(.9)) #+
+  plt <- plt + theme(axis.text.x = element_text(angle = 45, hjust = 1), 
+                                axis.title.x=element_blank()
+                                )
+  plt <- plt + ylab(ylab)
+  if(title != ''){
+    plt <- plt + ggtitle(title) 
+  }
+  plt <- plt + theme(legend.position="none")
+    
+  return(plt)
+}
+
+produce_barplot_comention_go <- function(column, title, ylab){
+  data_frame <- summarySE(go_metric_table, measurevar=column, groupvars=c("Type"))
+    
+  plt <- ggplot(data_frame, aes(x=Type, y=get(column), fill=Type)) 
+  plt <- plt + geom_bar(stat="identity")
+  plt <- plt + geom_errorbar(aes(ymin=get(column)-sd, ymax=get(column)+sd),
+                  width=.2,                    # Width of the error bars
+                  position=position_dodge(.9)) #+
+  plt <- plt + theme(axis.text.x = element_text(angle = 45, hjust = 1), 
+                                axis.title.x=element_blank()
+                                )
+  plt <- plt + ylab(ylab)
+  if(title != ''){
+    plt <- plt + ggtitle(title) 
+  }
+  plt <- plt + theme(legend.position="none")
+    
+  return(plt)
+}
+produce_barplot_comention_reactome <- function(column, title, ylab){
+  data_frame <- summarySE(reactome_metric_table, measurevar=column, groupvars=c("Type"))
+    
+  plt <- ggplot(data_frame, aes(x=Type, y=get(column), fill=Type)) 
+  plt <- plt + geom_bar(stat="identity")
+  plt <- plt + geom_errorbar(aes(ymin=get(column)-sd, ymax=get(column)+sd),
+                  width=.2,                    # Width of the error bars
+                  position=position_dodge(.9)) #+
+  plt <- plt + theme(axis.text.x = element_text(angle = 45, hjust = 1), 
+                                axis.title.x=element_blank()
+                                )
+  plt <- plt + ylab(ylab)
+  if(title != ''){
+    plt <- plt + ggtitle(title) 
+  }
+  plt <- plt + theme(legend.position="none")
+    
+  return(plt)
+}
+
+produce_barplot <- function(column, title, ylab){
+  data_frame <- summarySE(metric_table, measurevar=column, groupvars=c("Type"))
+    
+  plt <- ggplot(data_frame, aes(x=Type, y=get(column), fill=Type)) 
+  plt <- plt + geom_bar(stat="identity")
+  plt <- plt + geom_errorbar(aes(ymin=get(column)-sd, ymax=get(column)+sd),
+                  width=.2,                    # Width of the error bars
+                  position=position_dodge(.9)) #+
+  plt <- plt + theme(axis.text.x = element_text(angle = 45, hjust = 1), 
+                                axis.title.x=element_blank()
+                                )
+  plt <- plt + ylab(ylab)
+  if(title != ''){
+    plt <- plt + ggtitle(title) 
+  }
+  plt <- plt + theme(legend.position="none")
+    
+  return(plt)
+}
+
+
+delete_parental_terms <- function(df){
+  library(GOSim)
+  library(GO.db)
+  library(dplyr)
+    
+    
+  setOntology(ont = "BP")
+  go_l <- getParents()
+    
+  initial_clusters <- length(unique(df$Cluster))
+  
+  clusters_l <- unique(df$Cluster)
+  df1 <- data.frame()
+  
+  for(cluster in clusters_l){
+    cluster_subset <- filter(df, Cluster == cluster)
+    funsys_l <- cluster_subset$Funsys
+    
+    parents_l <- c()
+    if(length(funsys_l) > 1){
+      for(funsys in funsys_l){
+        parents_l <- c(parents_l, go_l[[funsys]])
+      }
+      for(parent in parents_l){
+        if(parent %in% funsys_l){
+          cluster_subset <- (cluster_subset[!cluster_subset$Funsys == parent, ])
+        }
+      }
+      df1 <- rbind(df1, cluster_subset)
+    }else{
+      df1 <- rbind(df1, cluster_subset)
+    }
+    
+  }
+  return(df1)
+}
+
+load_comention_files <- function(data, column_names, path_column, header, col_name_vector, group1, group2, group3){
+        factor_columns <- match(column_names, names(data))
+        factor_combinations <- unique(data[column_names])
+        all_data <- data.frame()
+        for(row in 1:nrow(factor_combinations)){
+                combination <- as.vector(t((factor_combinations[row,]))) #extract row AND convert to vector
+                check_combination <- data[factor_columns] == combination[col(data[factor_columns])]
+                name_list <- paste(combination, collapse='_')
+                paths <- data[[path_column]][which(apply(check_combination, 1, sum) == length(combination))]
+                count = 1
+
+                for(file_path in paths){
+                        files <- read.table(file_path, sep="\t", header=header)
+                        files$V4 <- NULL
+                        files <- cbind(files ,rep(c(paste(name_list)), nrow(files)))
+                        files <- cbind(files ,rep(c(paste(name_list,count, sep="_")), nrow(files)))
+                        if(startsWith(name_list, group1)){
+                          files <- cbind(files ,rep(c(paste(group1)), nrow(files)))
+                        }else if(startsWith(name_list, group2)){
+                          files <- cbind(files ,rep(c(paste(group2)), nrow(files)))
+                        }else{
+                          files <- cbind(files ,rep(c(paste(group3)), nrow(files)))
+                        }
+                        colnames(files) <- col_name_vector
+                        count <- count + 1
+
+                        all_data <- rbind(all_data, files)   
+                }             
+        }
+       
+        return(all_data)
+
+      }
+
+
+produce_density_plot <- function(data_table, values, net_names, net_types, x_scale = FALSE, x_lab, title, facet = FALSE){
+        plt <- ggplot(data_table, aes(x=get(values))) + geom_density(aes(group=get(net_names), colour=get(net_types)))
+        col <- c("firebrick1", "deepskyblue2")
+
+        if (facet == TRUE){
+          plt <- plt + facet_wrap( ~ groups, scales = "free")
+        }
+        if(x_scale == TRUE){
+          plt <- plt + scale_x_continuous(limits = c(0, 1))
+        }
+        plt <- plt + ylim(0, 4.5)
+        plt <- plt + xlab(x_lab)
+        plt <- plt + ylab("Density")
+        plt <- plt + ggtitle(title)
+        plt <- plt + theme(legend.title=element_blank())
+        plt <- plt + scale_fill_manual(values = col)
+        plt <- plt + scale_color_manual(values = col)
+
+        return(plt)
+      }
+
+
+
+```
+
+# Clusters Orphanet Neuromuscular Diseases Study
+
+We performed a phenotypic comorbidity analysis of neuromuscular diseases in Orphanet to elucidate molecular mechanisms underlying these phenotypes.  
+
+  
+In the following sections we will be describing each step and the results genereted.  
+
+## Step one: Datasets of NMDs, genes, phenotypes and typical NMD phenotypes
+
+Orphanet have an ontology structure. we found an ontology related to neuromuscular diseases, **Orphanet:183497 Genetic neuromuscular** disease. We extract all child terms related to Orphanet:183497 and all of the diseases asociated with this term.  
+
+Once we have the list of neuromuscular diseases, we coun the frequency of phenotypes in neuromuscular and non neuromuscular diseases. With these data, we can perform a fisher test analysis to find those phenotypes which are more represented in neuromusculare diseases rather than in non neuromuscular diseases. We have the following results:
+  
+```{r  echo=FALSE, warning=FALSE, message=FALSE}
+  summary_metric_table <- read.table("../results/orphanet_summary", sep="\t", header = FALSE)
+  colnames(summary_metric_table) <- c("Metric", "Value")
+  kable(summary_metric_table)
+```
+  
+**Table 1**: Preprocesing data summary
+  
+  
+## Step 2: Bipartite network to obtain phenotype-phenotype associations
+  
+  
+
+```{r  echo=FALSE, warning=FALSE, message=FALSE}
+  pairs_metric_table <- read.table("../results/orphanet_pairs_table", sep="\t", header = FALSE)
+  colnames(pairs_metric_table) <- c("Metric", "Value")
+  kable(pairs_metric_table)
+```
+
+**Table 2:** Bipartite results general summary.
+  
+
+In the following plot we can see the number of pairs which form the subnetwork with a HyI >= 2. 
+
+```{r  echo=FALSE, warning=FALSE, message=FALSE}
+produce_barplot("pairs_number", "Significant Pairs Number Orphanet", "Number of pairs")
+  
+```
+  
+**Figure 1:** Number of phenotype pairs with a HyI >= 2.
+  
+  
+```{r  echo=FALSE, warning=FALSE, message=FALSE}
+kable(ddply(metric_table, .(Type), summarize, "Pairs Number" = paste(round(mean(pairs_number),3), "\U00B1" , round(sd(pairs_number),3))))
+  
+```
+  
+**Table 3:** Number of phenotype pairs with a HyI >= 2.
+  
+
+### Validating phenotype-phenotye associations by PubMed co-mention
+    
+```{r  echo=FALSE, warning=FALSE, message=FALSE}
+
+comention_data <- load_comention_files(metric_table, 'Type', 'comention_analysis', FALSE, c("HPOA", "HPOB", "Pvalue", "Net_type", "Net_name", "groups"), "NMDs", "non_NMDs")
+
+produce_density_plot(comention_data, "Pvalue", "Net_name", "Net_type", x_scale = FALSE, "P-value", "P-value distribution", facet = FALSE)
+
+```   
+  
+**Figure 2** Comention pvalue density plot.
+  
+  
+```{r  echo=FALSE, warning=FALSE, message=FALSE}
+kable(ddply(metric_table, .(Type), summarize, "Pairs Number" = paste(round(mean(number_non_coocurrent_pairs_),3), "\U00B1", round(sd(number_non_coocurrent_pairs_),3))))
+  
+```
+**Table 4** Number of co-occurrent pairs
+  
+  
+## Step 3: Tripartite network to obtain phenotype-function pairs
+  
+In this step we will get phenotype-genes pairs. Through a functional assignment of these genes we can get phenotype-function pairs.
+  
+ ```{r  echo=FALSE, warning=FALSE, message=FALSE}
+  gene_metric_table <- read.table("../results/orphanet_gene_table", sep="\t", header = FALSE)
+  colnames(gene_metric_table) <- c("Metric", "Value")
+  kable(gene_metric_table)
+```
+  
+** Table 5** Tripartite results general summary
+  
+
+
+### Validating phenotype-function associations by PubMed co-mention
+  
+#### KEGG
+
+```{r  echo=FALSE, warning=FALSE, message=FALSE}
+  produce_barplot_comention_kegg("number_coocurrent_pairs_kegg", "KEGG", "Pares Significativos")
+
+``` 
+  
+**Figure 3** Significant phenotype-KEGG pairs
+  
+
+```{r  echo=FALSE, warning=FALSE, message=FALSE}
+  
+kable(ddply(kegg_metric_table, .(Type), summarize, "Co-occurrent pairs" = paste(round(mean(number_coocurrent_pairs_kegg),3), "\U00B1" , round(sd(number_coocurrent_pairs_kegg),3)), "No co-occurrent pairs" = paste(round(mean(number_non_coocurrent_pairs_kegg),3), "\U00B1" , round(sd(number_non_coocurrent_pairs_kegg),3))))
+  
+``` 
+  
+**Table 6** Significant phenotype-KEGG pairs
+  
+  
+#### GO
+
+```{r  echo=FALSE, warning=FALSE, message=FALSE}
+  produce_barplot_comention_go("number_coocurrent_pairs_go", "GO", "Pares Significativos")
+
+``` 
+  
+**Figure 4** Significant phenotype-GO pairs
+
+
+```{r  echo=FALSE, warning=FALSE, message=FALSE}
+  
+kable(ddply(go_metric_table, .(Type), summarize, "Co-occurrent pairs" = paste(round(mean(number_coocurrent_pairs_go),3), "\U00B1" , round(sd(number_coocurrent_pairs_go),3)), "No co-occurrent pairs" = paste(round(mean(number_non_coocurrent_pairs_go),3), "\U00B1" , round(sd(number_non_coocurrent_pairs_go),3))))
+
+``` 
+  
+**Table 7** Significant phenotype-GO pairs
+  
+
+##### Reactome
+  
+```{r  echo=FALSE, warning=FALSE, message=FALSE}
+produce_barplot_comention_reactome("number_coocurrent_pairs_reactome", "Reactome ", "Pares Significativos")
+
+```
+  
+**Figure 5** Significant phenotype-Reactome pairs
+  
+```{r  echo=FALSE, warning=FALSE, message=FALSE}
+  
+kable(ddply(reactome_metric_table, .(Type), summarize, "Co-occurrent pairs" = paste(round(mean(number_coocurrent_pairs_reactome),3), "\U00B1" , round(sd(number_coocurrent_pairs_reactome),3)), "No co-occurrent pairs" = paste(round(mean(number_non_coocurrent_pairs_reactome),3), "\U00B1" , round(sd(number_non_coocurrent_pairs_reactome),3))))
+
+``` 
+
+**Table 8** Significant phenotype-Reactome pairs
+  
+  
+
+## Step 4: Cluster Analysis
+  
+With linkcomm R package we obtain a number of clusters for each network.  In the following plots we show some results of the clustering process. By one hand we have measured the number of clusters obtained and the average number of nodes of each cluster.  
+  
+```{r  cho=FALSE, warning=FALSE, message=FALSE}
+grid.arrange(
+  produce_barplot("Cluster_number", "Cluster Number Orphanet", "Number of clusters"),
+  produce_barplot("Average_Cluster_size", "Cluster Size Orphanet", "Average Cluster size"),
+  ncol = 2
+)
+
+``` 
+  
+**Figure 6** Cluster analysis summary
+
+```{r  cho=FALSE, warning=FALSE, message=FALSE}
+
+kable(ddply(metric_table, .(Type), summarize, "Cluster Number" = paste(round(mean(Cluster_number),3), "\U00B1" , round(sd(Cluster_number),3)), "Average Cluster size" = paste(round(mean(Average_Cluster_size),3), "\U00B1" , round(sd(Average_Cluster_size),3))))
+  
+```
+   
+**Table 9** Cluster analysis summary
+
+
+### Functionally-coherent clusters of phenotypes in NMDs
+  
+```{r  cho=FALSE, warning=FALSE, message=FALSE}
+grid.arrange(
+  produce_barplot("Cluster_with_70_coherence_0.05", "70 % Coherence", "Number of clusters"),
+  produce_barplot("Cluster_with_50_coherence_0.05", "50 % Coherence", "Number of clusters"),
+  ncol = 2
+)
+
+``` 
+  
+**Figure 7** Functional coherent clusters summary
+  
+
+```{r  cho=FALSE, warning=FALSE, message=FALSE}
+  
+kable(ddply(metric_table, .(Type), summarize, "Cluster with 70 coherence_0.05" = paste(round(mean(Cluster_with_70_coherence_0.05),3), "\U00B1" , round(sd(Cluster_with_70_coherence_0.05),3)), "Cluster with 50 coherence_0.05" = paste(round(mean(Cluster_with_50_coherence_0.05),3), "\U00B1" , round(sd(Cluster_with_50_coherence_0.05),3))))  
+```
+  
+**Table 10** Functional coherent clusters summary
+
+
+## Clusters Details
+
+In this section we include Orphanet neuromuscular cluster's  details.  
+
+
+```{r  cho=FALSE, warning=FALSE, message=FALSE, results='asis'}
+
+
+clusters_hpo <- read.table("PATH/TO/FILES/neuromuscular_diseases_project/orpha_analysed_networks/orpha_neuromuscular_pairs/clustering.R_0000/clusters_file_with_names", sep ="\t", quote="", stringsAsFactors = FALSE, header = TRUE)
+if(nrow(clusters_hpo) > 0){
+    for (i in 1:length(clusters_hpo$hpo)){
+      url <- paste0("https://hpo.jax.org/app/browse/term/", clusters_hpo$hpo[i])
+      clusters_hpo$hpo[i] <- text_spec(clusters_hpo$hpo[i], link = url)
+    }
+  }
+
+
+kegg <- read.table("PATH/TO/FILES/neuromuscular_diseases_project/orpha_analysed_networks/orpha_neuromuscular_pairs/clusters_single_funsys_merger.py_0000/clusters_with_70_coherence_systems_kegg_0.05", sep ="\t", quote="", stringsAsFactors = FALSE, header = FALSE)
+colnames(kegg) <- c("Cluster", "Funsys", "Name", "Phenotype_percentage", "Genes")
+if(nrow(kegg) > 0){
+    for (i in 1:length(kegg$Funsys)){
+      url <- paste0("https://www.genome.jp/dbget-bin/www_bget?pathway+", kegg$Funsys[i])
+      kegg$Funsys[i] <- text_spec(kegg$Funsys[i], link = url)
+    }
+  }
+
+go_df <- read.table("PATH/TO/FILES/neuromuscular_diseases_project/orpha_analysed_networks/orpha_neuromuscular_pairs/clusters_single_funsys_merger.py_0001/clusters_with_70_coherence_systems_go_0.05", sep ="\t", quote="", stringsAsFactors = FALSE, header = FALSE)
+colnames(go_df) <- c("Cluster", "Funsys", "Name", "Phenotype_percentage", "Genes")
+go <- delete_parental_terms(go_df)
+if(nrow(go) > 0){  
+    for (i in 1:length(go$Funsys)){
+      url <- paste0("http://amigo.geneontology.org/amigo/term/", go$Funsys[i])
+      go$Funsys[i] <- text_spec(go$Funsys[i], link = url)
+    }
+  }
+
+reactome <- read.table("PATH/TO/FILES/neuromuscular_diseases_project/orpha_analysed_networks/orpha_neuromuscular_pairs/clusters_single_funsys_merger.py_0002/clusters_with_70_coherence_systems_reactome_0.05", sep ="\t", quote="", stringsAsFactors = FALSE, header = FALSE)
+colnames(reactome) <- c("Cluster", "Funsys", "Name", "Phenotype_percentage", "Genes")
+if(nrow(reactome) > 0){  
+    for (i in 1:length(reactome$Funsys)){
+      url <- paste0("https://reactome.org/content/detail/", reactome$Funsys[i])
+      reactome$Funsys[i] <- text_spec(reactome$Funsys[i], link = url)
+    }
+  }
+
+orpha_clusters_system <- rbind(kegg, go, reactome)
+
+all_clusters_lst <- group_cluster_information(clusters_hpo, orpha_clusters_system)
+
+ordered_cluster_lst <- order_a_list_by_vector(all_clusters_lst, "coherence_score")
+
+
+#clusters_file
+clusters_file_cytoscape <- read.table("PATH/TO/FILES/neuromuscular_diseases_project/orpha_analysed_networks/orpha_neuromuscular_pairs/clustering.R_0000/cytoscape_file", sep=" ", header=FALSE, quote="", stringsAsFactors = FALSE)
+clusters_file <- clusters_file_cytoscape[,c(1,3,5)]
+colnames(clusters_file) <- c("HPO-A", "HPO-B", "Cluster")
+
+
+for(i in 1:length(ordered_cluster_lst)){
+    list <- ordered_cluster_lst[[i]]
+    cluster_name <- unlist(strsplit(names(ordered_cluster_lst[i]), "_"))
+    cluster_number <- cluster_name[2]
+    if(!is.null(list[["system"]])){
+      cat("_ _ _", "\n", "_ _ _", "\n", "_ _ _", "\n")
+      list["coherence_score"] <- NULL
+      cat("# ", cluster_name, "\n")
+
+      cluster <- subset(clusters_file, Cluster == cluster_number)
+      hpo_names <- subset(clusters_hpo, cluster == cluster_number)
+      g <- graph.data.frame(cluster, directed = FALSE)
+      plot(g, vertex.label=gsub(" ", "\n", hpo_names$name), vertex.shape="none", vertex.label.cex=c(0.9), vertex.label.color="black")
+
+      for(i in list){
+        print(knitr::kable(i, format="markdown", row.name=FALSE))
+        cat("\n")
+      }
+    }
+  }
+
+for(i in 1:length(ordered_cluster_lst)){
+    list <- ordered_cluster_lst[[i]]
+    cluster_name <- unlist(strsplit(names(ordered_cluster_lst[i]), "_"))
+    cluster_number <- cluster_name[2]
+    if(is.null(list[["system"]])){
+      cat("_ _ _", "\n", "_ _ _", "\n", "_ _ _", "\n")
+      list["coherence_score"] <- NULL
+      cat("# ", cluster_name, "\n")
+
+      cluster <- subset(clusters_file, Cluster == cluster_number)
+      hpo_names <- subset(clusters_hpo, cluster == cluster_number)
+      g <- graph.data.frame(cluster, directed = FALSE)
+      plot(g, vertex.label=gsub(" ", "\n", hpo_names$name), vertex.shape="none", vertex.label.cex=c(0.9), vertex.label.color="black")
+
+      for(i in list){
+        print(knitr::kable(i, format="markdown", row.name=FALSE))
+        cat("\n")
+      }
+    }
+  }
+
+
+```
