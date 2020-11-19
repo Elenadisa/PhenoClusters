@@ -77,7 +77,7 @@ User need to define data output path in
 ``
 PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/build_networks/OMIM 
 ``
-**I.a launch_orphanet_build_networks.sh**.   
+**I.b launch_orphanet_build_networks.sh**.   
 
 *Output*.   
 User need to define data output path in 
