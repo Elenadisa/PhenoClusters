@@ -1,0 +1,160 @@
+build_phen_phen_network){
+	# Load netanalyzer
+	source ~soft_bio_267/initializes/init_netanalyzer
+	module load python/anaconda-3_440
+	PATH=$current_dir'/scripts/py_scripts':$PATH
+	export PATH
+
+	#get network layers of the bipartite network
+
+	LAYER_omim='diseases,OMIM:;hpo,HP:'
+	LAYER_orphanet='diseases,ORPHA:;hpo,HP:'
+
+	?
+
+	#execute NetAnalyzer to get phen-phen relationships
+	
+	if [ $database == "OMIM" ];
+	then
+	        NetAnalyzer.rb -i $disease2phen -l $LAYER_omim -m $metric_type -u 'hpo;diseases' -a phen2phen_net
+
+	else 
+	        NetAnalyzer.rb -i $disease2phen -l $LAYER_orphanet -m $metric_type -u 'hpo;diseases' -a phen2phen_net
+	
+	fi
+
+	echo -e  "Total_phenotype_pairs\t`wc -l  phen2phen_net | cut -d ' ' -f 1` " >> ../pairs_metrics
+	
+	awk '{if($3 >= $association_thresold) print $0}' phen2phen_net > more_spec_pairs_metric
+	echo -e  "Significant_phenotype_pairs\t`wc -l  more_spec_pairs_metric | cut -d ' ' -f 1` " >> ../pairs_metrics
+
+
+	selecting_phenotype_pairs.py -p more_spec_pairs_metric -l $list_neuromuscular_hpo > NMDs
+	echo -e  "NMDs\tNMDs\tpairs_number\t`wc -l  NMDs | cut -d ' ' -f 1` " >> ../metrics
+
+}
+
+
+generate_random_non_NMD_sets){
+	module load python/anaconda-3_440
+	PATH=$current_dir'/scripts/py_scripts':$PATH
+	export PATH
+	mkdir nets
+
+
+	for i in {1..$number_of_random_models}
+	do
+	?
+		#generate random sets of non_NMDs phenotypes
+		get_hpo_by_freq.py -l $list_neuromuscular_hpo -n $neuro_freq -N $non_neuro_freq -i 0 -A 2  -p 5 > random_hpo_list_$i
+
+		#Looking for non_NMDs phenotypes pairs of each set 
+		selecting_phenotype_pairs.py -p build_phen_phen_network)/more_spec_pairs_metric -l random_hpo_list_$i > nets/non_NMDs_$i
+		echo -e  "non_NMDs_$i\tnon_NMDs\tpairs_number\t`wc -l  nets/non_NMDs_$i | cut -d ' ' -f 1` " >> ../metrics
+		
+	done 
+}
+
+
+
+collect_nets){
+	rm -rf working_networks
+	mkdir working_networks
+	?
+	ln -s build_phen_phen_network)/NMDs working_networks
+	ln -s generate_random_non_NMD_sets)/nets/non_NMDs* working_networks
+
+	
+}
+
+
+get_phenotype_genes_pairs){
+	source ~soft_bio_267/initializes/init_netanalyzer
+
+	#get network layers of the tripartite network
+
+	LAYERS_omim='hpo,HP;disease,OMIM;genes,[0-9]'
+	LAYERS_orphanet='hpo,HP;disease,ORPHA;genes,[0-9]'
+
+	mkdir test
+	?
+	cut -f 1,4 $dictionary | sort -u > disease_hpo
+	cut -f 1,3 $dictionary | sort -u > disease_genes
+	cat disease_hpo disease_genes > tripartite
+	
+	#execute NetAnalyzer to get phen-gene relationships
+	if [ $database == "OMIM" ];
+	then
+	        
+	       NetAnalyzer.rb -i tripartite -l $LAYERS_omim -m $metric_type -u 'hpo,genes;disease' -a phen2gene.txt -N	
+
+	else 
+	       NetAnalyzer.rb -i tripartite -l $LAYERS_orphanet -m $metric_type -u 'hpo,genes;disease' -a phen2gene.txt -N	
+	
+	fi
+
+
+	#echo -e  "Number_of_phen2gene_pairs\t`wc -l  phen2gene.txt | cut -d ' ' -f 1` " >> ../gene_metrics
+	#echo -e  "Number_of_HPO_with_genes\t`cut -f 1  phen2gene.txt | sort -u | wc -l` " >> ../gene_metrics
+	echo -e  "Number_of_genes\t`cut -f 2  phen2gene.txt | sort -u | wc -l` " >> ../gene_metrics
+
+	awk '{if($3 >= 2) print $0}' phen2gene.txt > test/phen2gene_HyI_2.txt
+	#echo -e  "Number_of_phen2gene_pairs_OMIM_HyI_2\t`wc -l  test/phen2gene_HyI_2.txt | cut -d ' ' -f 1` " >> ../gene_metrics
+	#echo -e  "Number_of_HPO_OMIM_HyI_2\t`cut -f 1  test/phen2gene_HyI_2.txt | sort -u | wc -l` " >> ../gene_metrics
+	echo -e  "Number_of_genes_HyI_2\t`cut -f 2  test/phen2gene_HyI_2.txt | sort -u | wc -l` " >> ../gene_metrics
+
+	grep -Fwf $list_neuromuscular_hpo test/phen2gene_HyI_2.txt > test/nmd_phen2gene_HyI_2.txt
+	#echo -e  "NMD_phenotypes_with_genes_HyI_2\t`cut -f 1  test/nmd_phen2gene_HyI_2.txt | sort -u | wc -l` " >> ../gene_metrics
+	echo -e  "NMD_genes_HyI_2\t`cut -f 2  test/nmd_phen2gene_HyI_2.txt | sort -u | wc -l` " >> ../gene_metrics
+
+}
+
+
+
+single_term_enrichment_analysis_[kegg;go;reactome]){
+	#Initialize R
+	source ~soft_bio_267/initializes/init_R
+	mkdir rdm
+	
+	cut -f 1,2 get_phenotype_genes_pairs)/'test/phen2gene_HyI_2.txt' > phen2gene_HyI_2.txt
+	
+	parsed_p_values=`echo '$p_values' | tr '/' ' '`
+	for PVALUE in $parsed_p_values
+	do
+		?
+
+		#execute clusterProfiler and ReactomePA to get phen-function relationships
+
+		enrich_by_onto.R -p $PVALUE -e (*) -o enrich_(*)_single_$PVALUE -n phen2gene_HyI_2.txt
+
+		#echo -e  "Phenotypes_with_(*)_$PVALUE\t`cut -f 1  enrich_(*)_single_$PVALUE | sort -u | wc -l` " >> ../gene_metrics
+		echo -e  "Total_(*)_terms_$PVALUE\t`cut -f 2 enrich_(*)_single_$PVALUE | sort -u | wc -l` " >> ../gene_metrics
+		grep -Fwf $list_neuromuscular_hpo enrich_(*)_single_$PVALUE > nmd_phen2(*)_$PVALUE.txt
+		#echo -e  "NMD_phenotypes_with_(*)_$PVALUE\t`cut -f 1  nmd_phen2(*)_$PVALUE.txt | sort -u | wc -l` " >> ../gene_metrics
+		echo -e  "NMD_(*)_$PVALUE\t`cut -f 2 nmd_phen2(*)_$PVALUE.txt | sort -u | wc -l` " >> ../gene_metrics
+		
+		mkdir rdm/$PVALUE
+
+		cut -f 1,2 enrich_(*)_single_$PVALUE | tail -n +2 > rdm/$PVALUE/phen2(*)
+
+		for i in {1..$number_of_random_models}
+		do
+			shuffle_relationships.R -i rdm/$PVALUE/phen2(*) -o rdm/$PVALUE/rdm_phen2(*)_$i
+		done
+
+	done
+}
+
+
+}
+
+collect_single_enrichment_analysis){
+	rm -rf enrichments
+	mkdir enrichments
+	?
+	ln -s single_term_enrichment_analysis_go)/nmd_* enrichments
+	ln -s single_term_enrichment_analysis_kegg)/nmd_* enrichments
+	ln -s single_term_enrichment_analysis_reactome)/nmd_* enrichments
+
+}
+
