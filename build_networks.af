@@ -1,6 +1,6 @@
 build_phen_phen_network){
 	# LOAD NETANALYSER AND PYTHON
-	#load netanalyser example: source ~soft_bio_267/initializes/init_netanalyzer
+	source ~PATH/TO/init_netanalyzer
 	module load python/anaconda-3_440
 	PATH=$current_dir'/scripts/py_scripts':$PATH
 	export PATH
@@ -72,7 +72,7 @@ collect_nets){
 get_phenotype_genes_pairs){
 	
 	# LOAD NETANALYSER AND PYTHON
-	#load netanalyser example: source ~soft_bio_267/initializes/init_netanalyzer
+	source ~PATH/TO/init_netanalyzer
 
 	#get network layers of the tripartite network
 
