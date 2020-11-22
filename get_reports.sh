@@ -5,7 +5,8 @@
 #SBATCH --error=job.%J.err
 #SBATCH --output=job.%J.out
 
-source ~soft_bio_267/initializes/init_R
+#LOAD R
+module load  R/4.0.2
 
 current_dir=`pwd`
 
