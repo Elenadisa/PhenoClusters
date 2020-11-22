@@ -127,9 +127,9 @@ orphanet_analysed_results_source=PATH/TO/OUTPUT/FILES/neuromuscular_diseases_pro
 ### Execution
 
 The templetes have to be executed in a certain order.    
-**I** ./launch_ * _build_networks.sh.   
-**II** ./launch_ * _analyse_networks.sh.   
+**I** ./launch_omim_build_networks.sh or ./launch_orphanet_build_networks.sh.   
+**II** ./launch_omim_analyse_networks.sh or ./launch_orphanet_analyse_networks.sh.   
 **III** ./get_reports.sh.   
-* omim/orphanet
+
 
 ## Citation
