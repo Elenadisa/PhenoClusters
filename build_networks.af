@@ -1,6 +1,6 @@
 build_phen_phen_network){
-	# Load netanalyzer
-	source ~soft_bio_267/initializes/init_netanalyzer
+	# LOAD NETANALYSER AND PYTHON
+	#load netanalyser example: source ~soft_bio_267/initializes/init_netanalyzer
 	module load python/anaconda-3_440
 	PATH=$current_dir'/scripts/py_scripts':$PATH
 	export PATH
@@ -36,6 +36,7 @@ build_phen_phen_network){
 
 
 generate_random_non_NMD_sets){
+	#LOAD PYTHON
 	module load python/anaconda-3_440
 	PATH=$current_dir'/scripts/py_scripts':$PATH
 	export PATH
@@ -69,7 +70,9 @@ collect_nets){
 
 
 get_phenotype_genes_pairs){
-	source ~soft_bio_267/initializes/init_netanalyzer
+	
+	# LOAD NETANALYSER AND PYTHON
+	#load netanalyser example: source ~soft_bio_267/initializes/init_netanalyzer
 
 	#get network layers of the tripartite network
 
@@ -112,8 +115,9 @@ get_phenotype_genes_pairs){
 
 
 single_term_enrichment_analysis_[kegg;go;reactome]){
-	#Initialize R
-	source ~soft_bio_267/initializes/init_R
+	#LOAD R
+	module load  R/4.0.2
+
 	mkdir rdm
 	
 	cut -f 1,2 get_phenotype_genes_pairs)/'test/phen2gene_HyI_2.txt' > phen2gene_HyI_2.txt
