@@ -40,6 +40,10 @@ python3 get-pip.py
 ``
 pip3 install optparse-pretty numpy os.path2
 ``    
+  
+If you cannot install python pacakges you can instal [Anaconda](https://docs.anaconda.com/anaconda/install/linux/) for python 3.6 instead:
+
+
 
 **VI** Instal [R](https://cloud.r-project.org/). The following R packages must also be installed:  
 
