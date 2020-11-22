@@ -5,8 +5,9 @@
 #SBATCH --error=job.%J.err
 #SBATCH --output=job.%J.out
 
-#LOAD R
+#LOAD R and ruby
 module load  R/4.0.2
+module load ruby/2.3.8
 
 current_dir=`pwd`
 
