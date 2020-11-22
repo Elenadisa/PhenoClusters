@@ -21,12 +21,11 @@ git clone https://github.com/Elenadisa/PhenoClusters --recurse-submodules
 
 **II** Install [Ruby](https://rvm.io/) We recommend using the RVM manager.  
 
-**III** Install the ruby gems [AutoFlow](https://github.com/seoanezonjic/autoflow), [NetAnalyzer](https://github.com/ElenaRojano/NetAnalyzer) and PETS the following code:
+**III** Install the ruby gems [AutoFlow](https://github.com/seoanezonjic/autoflow) and [NetAnalyzer](https://github.com/ElenaRojano/NetAnalyzer) with the following code:
 
 ``
 gem install Autoflow
 gem install NetAnalyzer
-gem install PETS
 ``
 
 **V** Install [Python 3](https://www.python.org/downloads/) and install the necessary libraries using the following code:  
@@ -41,9 +40,8 @@ python3 get-pip.py
 pip3 install optparse-pretty numpy os.path2
 ``    
   
-If you cannot install python pacakges you can instal [Anaconda](https://docs.anaconda.com/anaconda/install/linux/) for python 3.6 instead:
-
-
+[Anaconda](https://docs.anaconda.com/anaconda/install/linux/) for python 3.6 can be used instead.
+  
 
 **VI** Instal [R](https://cloud.r-project.org/). The following R packages must also be installed:  
 
