@@ -28,7 +28,8 @@ all_diseases_data=$current_dir"/external_data/ALL_SOURCES_ALL_FREQUENCIES_diseas
 phen2gene=$data_source'/cut_0000/test/phen2gene_HyI_2.txt'
 
 
-source ~soft_bio_267/initializes/init_autoflow
+# LOAD AUTOFLOW
+source ~PATH/TO/init_autoflow
 
 ls $networks_source > orphanet_working_nets
 
