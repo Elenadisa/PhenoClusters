@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-source ~soft_bio_267/initializes/init_autoflow
+
 
 current_dir=`pwd`
 
@@ -29,8 +29,8 @@ hpo_dictionary=$current_dir'/processed_data/hpo_dictionary'
 phen2gene=$data_source'/cut_0000/test/phen2gene_HyI_2.txt'
 
 
-source ~soft_bio_267/initializes/init_autoflow
-
+# LOAD AUTOFLOW
+#load autoflow example: source ~soft_bio_267/initializes/init_autoflow
 
 ls $networks_source > omim_working_nets
 
