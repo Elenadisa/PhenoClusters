@@ -1,5 +1,7 @@
 topolological_analysis){
-	source ~soft_bio_267/initializes/init_R
+	#LOAD 
+	module load  R/4.0.2
+
 	PATH=$current_dir'/scripts/rscripts':$PATH
 	export PATH
 	net_name=`basename $working_net`
@@ -14,9 +16,9 @@ topolological_analysis){
 }
 
 term_pairs_comention_analysis){
-	#Initialize R and python
+	#LOAD R and python
 	module load python/anaconda-4.7.12
-    source ~soft_bio_267/initializes/init_R
+    module load  R/4.0.2
     PATH=$current_dir'/scripts/py_scripts':$PATH
 	export PATH
 	
@@ -33,8 +35,9 @@ term_pairs_comention_analysis){
 
 clustering_analysis){
 	resources: -m 2gb -t '7-00:00:00' -n 'cal'
+	#LOAD R and PYTHON
 	module load python/anaconda-4.7.12
-	source ~soft_bio_267/initializes/init_R
+	module load  R/4.0.2
 	PATH=$current_dir'/scripts/rscripts':$PATH
 	PATH=$current_dir'/scripts/py_scripts':$PATH
 	export PATH
@@ -53,6 +56,7 @@ clustering_analysis){
 }
 
 analyse_clusters_[kegg;go;reactome]){
+	#LOAD PYTHON
 	module load python/anaconda-3_440
 	PATH=$current_dir'/scripts/py_scripts':$PATH
 	export PATH
