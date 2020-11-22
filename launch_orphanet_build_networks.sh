@@ -1,7 +1,8 @@
 #! /usr/bin/env bash
 
+#LOAD R AND PYTHON
 module load python/anaconda-3_440
-source ~soft_bio_267/initializes/init_R
+module load R/4.0.2
 
 framework_dir=`dirname $0`
 export CODE_PATH=$(readlink -f $framework_dir )
@@ -98,7 +99,8 @@ mkdir /PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/build_networks/Orphan
 
 #\\$p_values=0.05/0.001/0.00001,
 
-source ~soft_bio_267/initializes/init_autoflow
+# LOAD AUTOFLOW
+source ~PATH/TO/init_autoflow
 
 variables=`echo -e "
 	\\$database=Orphanet,
