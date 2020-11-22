@@ -30,7 +30,7 @@ phen2gene=$data_source'/cut_0000/test/phen2gene_HyI_2.txt'
 
 
 # LOAD AUTOFLOW
-#load autoflow example: source ~soft_bio_267/initializes/init_autoflow
+#load autoflow example: source ~/init_autoflow
 
 ls $networks_source > omim_working_nets
 
