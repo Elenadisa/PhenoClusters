@@ -435,7 +435,7 @@ In this section we include Orphanet neuromuscular cluster's  details.
 ```{r  cho=FALSE, warning=FALSE, message=FALSE, results='asis'}
 
 
-clusters_hpo <- read.table("PATH/TO/FILES/neuromuscular_diseases_project/orpha_analysed_networks/orpha_neuromuscular_pairs/clustering.R_0000/clusters_file_with_names", sep ="\t", quote="", stringsAsFactors = FALSE, header = TRUE)
+clusters_hpo <- read.table("~/neuromuscular_diseases_project/orpha_analysed_networks/orpha_neuromuscular_pairs/clustering.R_0000/clusters_file_with_names", sep ="\t", quote="", stringsAsFactors = FALSE, header = TRUE)
 if(nrow(clusters_hpo) > 0){
     for (i in 1:length(clusters_hpo$hpo)){
       url <- paste0("https://hpo.jax.org/app/browse/term/", clusters_hpo$hpo[i])
@@ -444,7 +444,7 @@ if(nrow(clusters_hpo) > 0){
   }
 
 
-kegg <- read.table("PATH/TO/FILES/neuromuscular_diseases_project/orpha_analysed_networks/orpha_neuromuscular_pairs/clusters_single_funsys_merger.py_0000/clusters_with_70_coherence_systems_kegg_0.05", sep ="\t", quote="", stringsAsFactors = FALSE, header = FALSE)
+kegg <- read.table("~/neuromuscular_diseases_project/orpha_analysed_networks/orpha_neuromuscular_pairs/clusters_single_funsys_merger.py_0000/clusters_with_70_coherence_systems_kegg_0.05", sep ="\t", quote="", stringsAsFactors = FALSE, header = FALSE)
 colnames(kegg) <- c("Cluster", "Funsys", "Name", "Phenotype_percentage", "Genes")
 if(nrow(kegg) > 0){
     for (i in 1:length(kegg$Funsys)){
@@ -453,7 +453,7 @@ if(nrow(kegg) > 0){
     }
   }
 
-go_df <- read.table("PATH/TO/FILES/neuromuscular_diseases_project/orpha_analysed_networks/orpha_neuromuscular_pairs/clusters_single_funsys_merger.py_0001/clusters_with_70_coherence_systems_go_0.05", sep ="\t", quote="", stringsAsFactors = FALSE, header = FALSE)
+go_df <- read.table("~/neuromuscular_diseases_project/orpha_analysed_networks/orpha_neuromuscular_pairs/clusters_single_funsys_merger.py_0001/clusters_with_70_coherence_systems_go_0.05", sep ="\t", quote="", stringsAsFactors = FALSE, header = FALSE)
 colnames(go_df) <- c("Cluster", "Funsys", "Name", "Phenotype_percentage", "Genes")
 go <- delete_parental_terms(go_df)
 if(nrow(go) > 0){  
@@ -463,7 +463,7 @@ if(nrow(go) > 0){
     }
   }
 
-reactome <- read.table("PATH/TO/FILES/neuromuscular_diseases_project/orpha_analysed_networks/orpha_neuromuscular_pairs/clusters_single_funsys_merger.py_0002/clusters_with_70_coherence_systems_reactome_0.05", sep ="\t", quote="", stringsAsFactors = FALSE, header = FALSE)
+reactome <- read.table("~/neuromuscular_diseases_project/orpha_analysed_networks/orpha_neuromuscular_pairs/clusters_single_funsys_merger.py_0002/clusters_with_70_coherence_systems_reactome_0.05", sep ="\t", quote="", stringsAsFactors = FALSE, header = FALSE)
 colnames(reactome) <- c("Cluster", "Funsys", "Name", "Phenotype_percentage", "Genes")
 if(nrow(reactome) > 0){  
     for (i in 1:length(reactome$Funsys)){
@@ -480,7 +480,7 @@ ordered_cluster_lst <- order_a_list_by_vector(all_clusters_lst, "coherence_score
 
 
 #clusters_file
-clusters_file_cytoscape <- read.table("PATH/TO/FILES/neuromuscular_diseases_project/orpha_analysed_networks/orpha_neuromuscular_pairs/clustering.R_0000/cytoscape_file", sep=" ", header=FALSE, quote="", stringsAsFactors = FALSE)
+clusters_file_cytoscape <- read.table("~/neuromuscular_diseases_project/orpha_analysed_networks/orpha_neuromuscular_pairs/clustering.R_0000/cytoscape_file", sep=" ", header=FALSE, quote="", stringsAsFactors = FALSE)
 clusters_file <- clusters_file_cytoscape[,c(1,3,5)]
 colnames(clusters_file) <- c("HPO-A", "HPO-B", "Cluster")
 
