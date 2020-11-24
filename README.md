@@ -63,14 +63,14 @@ PhenoClusters workflow uses some scripts from [sys_bio_lab](https://github.com/s
 get_table_ontology.rb (store in scripts/ruby_scripts)  
 pubmedIdRetriever.rb (store in scripts/ruby_scripts)  
 get_fisher.R (store in scripts/rscripts)  
-***Functional assignment:***
+***Functional assignment:***  
 enrich_by_onto.R (store in scripts/rscripts)  
 enrich_by_onto directory (store in scripts/rscripts)  
 ***Get reports:***  
 create_metric_table.rb (store in scripts/ruby_scripts)  
 create_report.R (store in scripts/rscripts)  
   
-    
+
 ## Usage
   
 PhenoClusters workflow consists in five scripts:    
