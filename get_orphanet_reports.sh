@@ -11,11 +11,9 @@ module load ruby/2.3.8
 
 current_dir=`pwd`
 
-framework_dir=`dirname $0`
-export CODE_PATH=$(readlink -f $framework_dir )
-export PATH=$CODE_PATH'/sys_bio_lab_scripts:'$PATH
-export PATH=$CODE_PATH'/scripts/py_scripts:'$PATH
-export PATH=$CODE_PATH'/scripts/rscripts:'$PATH
+export PATH=$current_dir'/scripts/ruby_scripts:'$PATH
+export PATH=$current_dir'/scripts/py_scripts:'$PATH
+export PATH=$current_dir'/scripts/rscripts:'$PATH
 
 mkdir results
 
