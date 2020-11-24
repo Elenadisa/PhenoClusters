@@ -4,14 +4,11 @@
 module load python/anaconda-3_440
 module load R/4.0.2
 
-framework_dir=`dirname $0`
-export CODE_PATH=$(readlink -f $framework_dir )
-export PATH=$CODE_PATH'/sys_bio_lab_scripts:'$PATH
-export PATH=$CODE_PATH'/scripts/py_scripts:'$PATH
-export PATH=$CODE_PATH'/scripts/rscripts:'$PATH
-
-
 current_dir=`pwd`
+
+export PATH=$current_dir'/scripts/ruby_scripts:'$PATH
+export PATH=$current_dir'/scripts/py_scripts:'$PATH
+export PATH=$current_dir'/scripts/rscripts:'$PATH
 
 mkdir external_data
 mkdir processed_data
