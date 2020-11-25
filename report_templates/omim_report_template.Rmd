@@ -395,8 +395,8 @@ With linkcomm R package we obtain a number of clusters for each network.  In the
   
 ```{r  cho=FALSE, warning=FALSE, message=FALSE}
 grid.arrange(
-  produce_barplot("Cluster_number", "Cluster Number Orphanet", "Number of clusters"),
-  produce_barplot("Average_Cluster_size", "Cluster Size Orphanet", "Average Cluster size"),
+  produce_barplot("Cluster_number", "Cluster Number OMIM", "Number of clusters"),
+  produce_barplot("Average_Cluster_size", "Cluster Size OMIM", "Average Cluster size"),
   ncol = 2
 )
 
@@ -478,9 +478,9 @@ if(nrow(reactome) > 0){
     }
   }
 
-orpha_clusters_system <- rbind(kegg, go, reactome)
+omim_clusters_system <- rbind(kegg, go, reactome)
 
-all_clusters_lst <- group_cluster_information(clusters_hpo, orpha_clusters_system)
+all_clusters_lst <- group_cluster_information(clusters_hpo, omim_clusters_system)
 
 ordered_cluster_lst <- order_a_list_by_vector(all_clusters_lst, "coherence_score")
 
