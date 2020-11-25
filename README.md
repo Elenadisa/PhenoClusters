@@ -77,8 +77,9 @@ create_report.R (keep it in scripts/rscripts)
 
 ## Workflow elements  
   
-**- Autoflow templates:** There are six main scripts programmed in bash (.sh) with their correspond autoflow template (.af). These scripts are located in the main directory.  
-**- Scripts:** Script directory contain the script that will be executed allong the workflow. There is a directory for each programming language used.  
+**- Autoflow templates:** There are six main scripts programmed in bash (.sh) with their correspond autoflow template (.af). These scripts are located in the main directory. (1) *lauch_omim_build_networks.sh* to generate phenotype-phenotype pairs from OMIM diseases and the genes corresponding to these phenotypes, while *lauch_orphanet_build_networks.sh* do the same for Orphanet database; (2) *launch_omim_analayse_network.sh* to clusterise OMIM phenotypes and *launch_orphanet_analayse_network.sh* to clusterise Orphanet phenotypes; and (3) *get_omim_report.sh* generates the ready-to-use html graphical report for data from OMIM, while *get_orphanet_reports.sh* do the same for Orphanet results.
+
+**- Scripts:** Script directory contain the script that will be executed allong the workflow. There is a directory for each programming language used (Python (/py_scripts), R (/rscript), ruby (ruby_scripts)).  
 **-Report_templates:** Directory which contain RMarkdown report templates to obtain the results of executing different parts of the workflow.  
 
   
@@ -168,12 +169,12 @@ PhenoClusters workflow consists of different scripts that execute Autoflow templ
 Autoflow templates have to be executed in a certain order:
 
 **OMIM:**
-***Ia*** ./launch_omim_build_networks.sh.  
-***IIa*** ./launch_omim_analyse_networks.sh.    
-***IIIa*** ./get_omim_reports.sh.   
-  
+***Ia*** ./launch_omim_build_networks.sh: generate phenotype-phenotype pairs from OMIM diseases and the genes corresponding to these phenotypes.  
+***IIa*** ./launch_omim_analyse_networks.sh: clusterise OMIM phenotypes.      
+***IIIa*** ./get_omim_reports.sh: generates the ready-to-use html graphical report for data from OMIM.  
+
 **Orphanet:**  
-***Ib*** ./launch_orphanet_build_networks.sh.   
+***Ib*** ./launch_orphanet_build_networks.sh
 ***IIb*** ./launch_orphanet_analyse_networks.sh.  
 ***IIIb***./get_orphanet_reports.sh.  
   
