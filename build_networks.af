@@ -104,8 +104,8 @@ get_phenotype_genes_pairs){
 	echo -e  "Number_of_genes\t`cut -f 2  phen2gene.txt | sort -u | wc -l` " >> ../gene_metrics
 
 	awk '{if($3 >= 2) print $0}' phen2gene.txt > test/phen2gene_HyI_2.txt
-	#echo -e  "Number_of_phen2gene_pairs_HyI_2\t`wc -l  test/phen2gene_HyI_2.txt | cut -d ' ' -f 1` " >> ../gene_metrics
-	#echo -e  "Number_of_HPO_OMIM_HyI_2\t`cut -f 1  test/phen2gene_HyI_2.txt | sort -u | wc -l` " >> ../gene_metrics
+	echo -e  "Number_of_phen2gene_pairs_HyI_2\t`wc -l  test/phen2gene_HyI_2.txt | cut -d ' ' -f 1` " >> ../gene_metrics
+	#echo -e  "Number_of_HPO_HyI_2\t`cut -f 1  test/phen2gene_HyI_2.txt | sort -u | wc -l` " >> ../gene_metrics
 	echo -e  "Number_of_genes_HyI_2\t`cut -f 2  test/phen2gene_HyI_2.txt | sort -u | wc -l` " >> ../gene_metrics
 
 	grep -Fwf $list_neuromuscular_hpo test/phen2gene_HyI_2.txt > test/nmd_phen2gene_HyI_2.txt
