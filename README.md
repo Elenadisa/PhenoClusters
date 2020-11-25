@@ -5,6 +5,10 @@ PhenoCluster is a workflow built in Autoflow that enables the user to search for
   
 ## Systems Requirements
   
+The flow is programmed into several languages they need. In addition, for each language you will need to install their corresponding bookries (see Installation in Linux section). Finally it will be necessary to download scripts from the group repository [sys_bio_lab](https://github.com/seoanezonjic/sys_bio_lab_scripts/tree/65d5dfd061e624f57f7a48b59af997c50e6b6a27).  
+  
+### Programming Languages
+  
 Python 3.  
 Ruby 2.4.1.  
 R version 3.3.1 or higher.  
@@ -55,7 +59,7 @@ Furthermore, these bioconductor packages should be installed using the the BiocM
 BiocManager::install(c("clusterProfiler", "ReactomePA", "org.Hs.eg.db", "DOSE", "GO.db", "GOSim"))
 `` 
   
-## Additional Scripts  
+### Additional Scripts  
   
 PhenoClusters workflow uses some scripts from [sys_bio_lab](https://github.com/seoanezonjic/sys_bio_lab_scripts/tree/65d5dfd061e624f57f7a48b59af997c50e6b6a27). Please download the scripts to run the following sections:
 
@@ -71,9 +75,16 @@ create_metric_table.rb (keep it in scripts/ruby_scripts)
 create_report.R (keep it in scripts/rscripts)  
   
 
+## Workflow elements  
+  
+**- Autoflow templates:** There are six main scripts programmed in bash (.sh) with their correspond autoflow template (.af). These scripts are located in the main directory.  
+**- Scripts:** Script directory contain the script that will be executed allong the workflow. There is a directory for each programming language used.  
+**-Report_templates:** Directory which contain RMarkdown report templates to obtain the results of executing different parts of the workflow.  
+
+  
 ## Usage
   
-PhenoClusters workflow consists in five scripts:    
+PhenoClusters workflow consists in six scripts:    
 **I.a lauch_omim_build_networks.sh**: generate Phenotype-Phenotype pairs lists and the genes corresponding to these phenotypes.    
 **I.b lauch_orphanet_build_networks.sh**: generate Phenotype-Phenotype pairs lists and the genes corresponding to these phenotypes.    
 They execute an autoflow template *build_networks.af*.   
@@ -139,13 +150,31 @@ omim_analysed_results_source=PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project
 orphanet_build_results_source=/PATH/TO/OUTPUT/FILES//neuromuscular_diseases_project/build_networks/Orphanet  
 orphanet_analysed_results_source=PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/orphanet_analysed_networks  
 ``
+
+### Make PATH accesible all the installed software.
   
-### Execution
+As different programming language are used, the path must be made accessible for all installed software (R, python, Ruby, NetAnalyzer y Autoflow). You'll find in the workflow scripts a comment - LOAD XX in the places where it needs some path to a software.   
 
-The templetes have to be executed in a certain order.    
-**Ia** ./launch_omim_build_networks.sh.	**Ib** ./launch_orphanet_build_networks.sh.   
-**IIa** ./launch_omim_analyse_networks.sh.	**IIb** ./launch_orphanet_analyse_networks.sh.   
-**IIIa** ./get_omim_reports.sh.	**IIIb**./get_orphanet_reports.sh.   
+### Make PATH accesible the folder scripts.  
+  
+In scripts directory there are other directorys in which the scripts needed for running the workflow. There are one directory for each programming language.  
+Make sure that the path accesible for the scripts directory in the different workflow parts.  
+  
+  
+## Execution
 
+PhenoClusters workflow consists of different scripts that execute Autoflow templates that will serve to extract and analyze information from two different databases, OMIM and Orphanet. These scripts/templates are located in the main directory. Autoflow templates will execute different scripts located in their corresponding directory. 
 
+Autoflow templates have to be executed in a certain order:
+
+**OMIM:**
+***Ia*** ./launch_omim_build_networks.sh.  
+***IIa*** ./launch_omim_analyse_networks.sh.    
+***IIIa*** ./get_omim_reports.sh.   
+  
+**Orphanet:**  
+***Ib*** ./launch_orphanet_build_networks.sh.   
+***IIb*** ./launch_orphanet_analyse_networks.sh.  
+***IIIb***./get_orphanet_reports.sh.  
+  
 ## Citation
