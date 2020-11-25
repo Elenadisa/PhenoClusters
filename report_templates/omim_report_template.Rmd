@@ -258,17 +258,20 @@ By conducting a literature review, we can stabilize a number of keywords to filt
   
 Once we have the list of neuromuscular diseases, we count the frequency of phenotypes in neuromuscular and non neuromuscular diseases. With these data, we can perform a fisher test analysis to find those phenotypes which are more represented in neuromusculare diseases rather than in non neuromuscular diseases.
   
+**Table 1**: Preprocesing data summary.  
+
 ```{r  echo=FALSE, warning=FALSE, message=FALSE}
   summary_metric_table <- read.table("../results/omim_summary", sep="\t", header = FALSE)
   colnames(summary_metric_table) <- c("Metric", "Value")
   kable(summary_metric_table)
 ```
     
-**Table 1**: Preprocesing data summary
   
   
 ## Step 2: Bipartite network to obtain phenotype-phenotype associations
   
+
+**Table 2:** Bipartite results general summary.  
 
 ```{r  echo=FALSE, warning=FALSE, message=FALSE}
   pairs_metric_table <- read.table("../results/omim_pairs_table", sep="\t", header = FALSE)
@@ -276,29 +279,32 @@ Once we have the list of neuromuscular diseases, we count the frequency of pheno
   kable(pairs_metric_table)
 ```
   
-**Table 2:** Bipartite results general summary.
   
 
 In the following plot we can see the number of pairs which form the subnetwork with a HyI >= 2. 
+  
+**Figure 1:** Number of phenotype pairs with a HyI >= 2.  
 
 ```{r  echo=FALSE, warning=FALSE, message=FALSE}
 produce_barplot("pairs_number", "Significant Pairs Number OMIM", "Number of pairs")
   
 ```
     
-**Figure 1:** Number of phenotype pairs with a HyI >= 2.
   
+**Table 3:** Number of phenotype pairs with a HyI >= 2.
+
 ```{r  echo=FALSE, warning=FALSE, message=FALSE}
 kable(ddply(metric_table, .(Type), summarize, "Pairs Number" = paste(round(mean(pairs_number),3), "\U00B1", round(sd(pairs_number),3))))
   
 ```
   
-**Table 3:** Number of phenotype pairs with a HyI >= 2.
 
 ### Validating phenotype-phenotye associations by PubMed co-mention
   
   
-    
+  
+**Figure 2** Comention pvalue density plot.  
+
 ```{r  echo=FALSE, warning=FALSE, message=FALSE}
 
 comention_data <- load_comention_files(metric_table, 'Type', 'comention_analysis', FALSE, c("HPOA", "HPOB", "Pvalue", "Net_type", "Net_name", "groups"), "NMDs", "non_NMDs")
@@ -307,92 +313,98 @@ produce_density_plot(comention_data, "Pvalue", "Net_name", "Net_type", x_scale =
 
 ```   
   
-**Figure 2** Comention pvalue density plot.
   
+**Table 4** Number of co-occurrent pairs.  
   
 ```{r  echo=FALSE, warning=FALSE, message=FALSE}
 kable(ddply(metric_table, .(Type), summarize, "Pairs Number" = paste(round(mean(number_non_coocurrent_pairs_),3), "\U00B1", round(sd(number_non_coocurrent_pairs_),3))))
   
 ```
-**Table 4** Number of co-occurrent pairs
   
   
 ## Step 3: Tripartite network to obtain phenotype-function pairs
   
 In this step we will get phenotype-genes pairs. Through a functional assignment of these genes we can get phenotype-function pairs.
   
- ```{r  echo=FALSE, warning=FALSE, message=FALSE}
+** Table 5** Tripartite results general summary.  
+
+```{r  echo=FALSE, warning=FALSE, message=FALSE}
   gene_metric_table <- read.table("../results/omim_gene_table", sep="\t", header = FALSE)
   colnames(gene_metric_table) <- c("Metric", "Value")
   kable(gene_metric_table)
 ```  
-  
-** Table 5** Tripartite results general summary
   
 
 
 ### Validating phenotype-function associations by PubMed co-mention
   
 #### KEGG
+  
+**Figure 3** Significant phenotype-KEGG pairs
 
 ```{r  echo=FALSE, warning=FALSE, message=FALSE}
   produce_barplot_comention_kegg("number_coocurrent_pairs_kegg", "KEGG", "Pares Significativos")
 
 ``` 
   
-**Figure 3** Significant phenotype-KEGG pairs
-  
 
+**Table 6** Significant phenotype-KEGG pairs.  
+  
 ```{r  echo=FALSE, warning=FALSE, message=FALSE}
   
 kable(ddply(kegg_metric_table, .(Type), summarize, "Co-occurrent pairs" = paste(round(mean(number_coocurrent_pairs_kegg),3), "\U00B1" , round(sd(number_coocurrent_pairs_kegg),3)), "No co-occurrent pairs" = paste(round(mean(number_non_coocurrent_pairs_kegg),3), "\U00B1" , round(sd(number_non_coocurrent_pairs_kegg),3))))
   
 ``` 
-  
-**Table 6** Significant phenotype-KEGG pairs
+
   
   
 #### GO
+  
+**Figure 4** Significant phenotype-GO pairs.  
 
 ```{r  echo=FALSE, warning=FALSE, message=FALSE}
   produce_barplot_comention_go("number_coocurrent_pairs_go", "GO", "Pares Significativos")
 
 ``` 
   
-**Figure 4** Significant phenotype-GO pairs
 
-
+**Table 7** Significant phenotype-GO pairs.  
+  
 ```{r  echo=FALSE, warning=FALSE, message=FALSE}
   
 kable(ddply(go_metric_table, .(Type), summarize, "Co-occurrent pairs" = paste(round(mean(number_coocurrent_pairs_go),3), "\U00B1" , round(sd(number_coocurrent_pairs_go),3)), "No co-occurrent pairs" = paste(round(mean(number_non_coocurrent_pairs_go),3), "\U00B1" , round(sd(number_non_coocurrent_pairs_go),3))))
 
 ``` 
   
-**Table 7** Significant phenotype-GO pairs
   
 
 ##### Reactome
   
+**Figure 5** Significant phenotype-Reactome pairs.  
+
 ```{r  echo=FALSE, warning=FALSE, message=FALSE}
 produce_barplot_comention_reactome("number_coocurrent_pairs_reactome", "Reactome ", "Pares Significativos")
 
 ```
   
-**Figure 5** Significant phenotype-Reactome pairs
   
+**Table 8** Significant phenotype-Reactome pairs.  
+
 ```{r  echo=FALSE, warning=FALSE, message=FALSE}
   
 kable(ddply(reactome_metric_table, .(Type), summarize, "Co-occurrent pairs" = paste(round(mean(number_coocurrent_pairs_reactome),3), "\U00B1" , round(sd(number_coocurrent_pairs_reactome),3)), "No co-occurrent pairs" = paste(round(mean(number_non_coocurrent_pairs_reactome),3), "\U00B1" , round(sd(number_non_coocurrent_pairs_reactome),3))))
 
 ``` 
   
-**Table 8** Significant phenotype-Reactome pairs
+
  
   
 ## Step 4: Cluster Analysis
   
 With linkcomm R package we obtain a number of clusters for each network.  In the following plots we show some results of the clustering process. By one hand we have measured the number of clusters obtained and the average number of nodes of each cluster.  
   
+**Figure 6** Cluster analysis summary.  
+
 ```{r  cho=FALSE, warning=FALSE, message=FALSE}
 grid.arrange(
   produce_barplot("Cluster_number", "Cluster Number OMIM", "Number of clusters"),
@@ -402,7 +414,8 @@ grid.arrange(
 
 ``` 
   
-**Figure 6** Cluster analysis summary
+  
+**Table 9** Cluster analysis summary.  
 
 ```{r  cho=FALSE, warning=FALSE, message=FALSE}
 
@@ -410,11 +423,12 @@ kable(ddply(metric_table, .(Type), summarize, "Cluster Number" = paste(round(mea
   
 ```
    
-**Table 9** Cluster analysis summary
 
 
 ### Functionally-coherent clusters of phenotypes in NMDs
   
+**Figure 7** Functional coherent clusters.  
+
 ```{r  cho=FALSE, warning=FALSE, message=FALSE}
 grid.arrange(
   produce_barplot("Cluster_with_70_coherence_0.05", "70 % Coherence", "Number of clusters"),
@@ -424,15 +438,14 @@ grid.arrange(
 
 ``` 
   
-**Figure 7** Functional coherent clusters 
   
-
+**Table 10** Functional coherent clusters summary.  
+  
 ```{r  cho=FALSE, warning=FALSE, message=FALSE}
   
 kable(ddply(metric_table, .(Type), summarize, "Cluster with 70 coherence_0.05" = paste(round(mean(Cluster_with_70_coherence_0.05),3), "\U00B1" , round(sd(Cluster_with_70_coherence_0.05),3)), "Cluster with 50 coherence_0.05" = paste(round(mean(Cluster_with_50_coherence_0.05),3), "\U00B1" , round(sd(Cluster_with_50_coherence_0.05),3))))
 ```
   
-**Table 10** Functional coherent clusters summary
 
 
 ## Clusters Details
