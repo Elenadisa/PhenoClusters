@@ -96,7 +96,7 @@ They execute an autoflow template *analyse_network.af*.
 
 **III.a get_omim_reports.sh**: generates html reports with workflow results for OMIM analysis.  
 **III.b get_orphanet_reports.sh**: generates html reports with workflow results for Orphanet analysis.  
-
+  
 ### Defining input/output paths. 
 
 User have to define input/output paths in launch scripts:  
