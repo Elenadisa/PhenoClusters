@@ -59,18 +59,18 @@ BiocManager::install(c("clusterProfiler", "ReactomePA", "org.Hs.eg.db", "DOSE", 
   
 ### Additional Scripts  
   
-PhenoClusters workflow uses some scripts from [sys_bio_lab](https://github.com/seoanezonjic/sys_bio_lab_scripts/tree/65d5dfd061e624f57f7a48b59af997c50e6b6a27). Please download the scripts to run the following sections:
+PhenoClusters workflow uses some scripts from [sys_bio_lab](https://github.com/seoanezonjic/sys_bio_lab_scripts/tree/65d5dfd061e624f57f7a48b59af997c50e6b6a27). Please download the scripts to run the following sections and save them in their corresponding directory:
 
 ***Pubmed Comention Analysis:***  
-get_table_ontology.rb (keep it in scripts/ruby_scripts)  
-pubmedIdRetriever.rb (keep it in scripts/ruby_scripts)  
-get_fisher.R (keep it in scripts/rscripts)  
+get_table_ontology.rb (save it in scripts/ruby_scripts)  
+pubmedIdRetriever.rb (save it in scripts/ruby_scripts)  
+get_fisher.R (save it in scripts/rscripts)  
 ***Functional assignment:***  
-enrich_by_onto.R (keep it in scripts/rscripts)  
-enrich_by_onto directory (keep it in scripts/rscripts)  
+enrich_by_onto.R (save it in scripts/rscripts)  
+enrich_by_onto directory (save it in scripts/rscripts)  
 ***Get reports:***  
-create_metric_table.rb (keep it in scripts/ruby_scripts)  
-create_report.R (keep it in scripts/rscripts)  
+create_metric_table.rb (save it in scripts/ruby_scripts)  
+create_report.R (save it in scripts/rscripts)  
   
 
 ## Workflow elements  
