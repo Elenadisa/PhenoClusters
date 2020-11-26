@@ -258,7 +258,7 @@ By conducting a literature review, we can stabilize a number of keywords to filt
   
 Once we have the list of neuromuscular diseases, we count the frequency of phenotypes in neuromuscular and non neuromuscular diseases. With these data, we can perform a fisher test analysis to find those phenotypes which are more represented in neuromusculare diseases rather than in non neuromuscular diseases.
   
-**Table 1**: Preprocesing data summary  
+<div align="center">**Table 1**: Preprocesing data summary</div>  
 
 ```{r  echo=FALSE, warning=FALSE, message=FALSE}
   summary_metric_table <- read.table("../results/omim_summary", sep="\t", header = FALSE)
@@ -271,7 +271,7 @@ Once we have the list of neuromuscular diseases, we count the frequency of pheno
     
 ## Step 2: Bipartite network to obtain phenotype-phenotype associations
   
-**Table 2:** Bipartite results general summary.  
+<div align="center">**Table 2:** Bipartite results general summary.</div>  
 
 ```{r  echo=FALSE, warning=FALSE, message=FALSE}
   pairs_metric_table <- read.table("../results/omim_pairs_table", sep="\t", header = FALSE)
@@ -292,7 +292,7 @@ produce_barplot("pairs_number", "Significant Pairs Number OMIM", "Number of pair
 ```
     
   
-**Table 3:** Number of phenotype pairs with a HyI >= 2.  
+<div align="center">**Table 3:** Number of phenotype pairs with a HyI >= 2.</div>  
    
 ```{r  echo=FALSE, warning=FALSE, message=FALSE}
 kable(ddply(metric_table, .(Type), summarize, "Pairs Number" = paste(round(mean(pairs_number),3), "\U00B1", round(sd(pairs_number),3)))) %>%
@@ -317,7 +317,7 @@ produce_density_plot(comention_data, "Pvalue", "Net_name", "Net_type", x_scale =
   
 
   
-**Table 4** Number of co-occurrent pairs.  
+<div align="center">**Table 4** Number of co-occurrent pairs.</div>  
 
 ```{r  echo=FALSE, warning=FALSE, message=FALSE}
 kable(ddply(metric_table, .(Type), summarize, "Pairs Number" = paste(round(mean(number_non_coocurrent_pairs_),3), "\U00B1", round(sd(number_non_coocurrent_pairs_),3)))) %>% 
@@ -331,7 +331,7 @@ kable_classic(full_width = F, html_font = "Calibri", font_size = 16 ) %>% row_sp
   
 In this step we will get phenotype-genes pairs. Through a functional assignment of these genes we can get phenotype-function pairs.
   
-**Table 5** Tripartite results general summary  
+<div align="center">**Table 5** Tripartite results general summary.</div>  
     
 ```{r  echo=FALSE, warning=FALSE, message=FALSE}
   gene_metric_table <- read.table("../results/omim_gene_table", sep="\t", header = FALSE)
@@ -354,7 +354,7 @@ In this step we will get phenotype-genes pairs. Through a functional assignment 
 ``` 
   
   
-**Table 6** Significant phenotype-KEGG pairs.  
+<div align="center">**Table 6** Significant phenotype-KEGG pairs.</div>  
 
 ```{r  echo=FALSE, warning=FALSE, message=FALSE}
   
@@ -376,7 +376,7 @@ kable_classic(full_width = T, html_font = "Calibri", font_size = 16) %>% row_spe
 ``` 
 
   
-**Table 7** Significant phenotype-GO pairs.  
+<div align="center">**Table 7** Significant phenotype-GO pairs.</div>  
   
 ```{r  echo=FALSE, warning=FALSE, message=FALSE}
   
@@ -397,7 +397,7 @@ produce_barplot_comention_reactome("number_coocurrent_pairs_reactome", "Reactome
 ```
   
   
-**Table 8** Significant phenotype-Reactome pairs. 
+<div align="center">**Table 8** Significant phenotype-Reactome pairs.</div> 
 
 ```{r  echo=FALSE, warning=FALSE, message=FALSE}
   
@@ -424,7 +424,7 @@ grid.arrange(
   
 
   
-**Table 9** Cluster analysis summary.  
+<div align="center">**Table 9** Cluster analysis summary.</div>  
 
 ```{r  cho=FALSE, warning=FALSE, message=FALSE}
 
@@ -448,7 +448,7 @@ grid.arrange(
 ``` 
   
   
-**Table 10** Functional coherent clusters summary.
+<div align="center">**Table 10** Functional coherent clusters summary.</div>
     
 ```{r  cho=FALSE, warning=FALSE, message=FALSE}
   
