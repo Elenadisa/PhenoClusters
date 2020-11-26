@@ -105,9 +105,10 @@ User have to define input/output paths in launch scripts:
 
 *Output*.   
 User need to define data output path in 
-``
+```
 PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/OMIM 
-``
+```
+  
 **I.b launch_orphanet_build_networks.sh**.   
 
 *Output*.   
