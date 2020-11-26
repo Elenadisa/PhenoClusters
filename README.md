@@ -152,6 +152,26 @@ orphanet_build_results_source=/PATH/TO/OUTPUT/FILES//neuromuscular_diseases_proj
 orphanet_analysed_results_source=PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/orphanet_analysed_networks  
 ``
 
+### Defining Keywords
+
+Keywords are essential to be able to divide diseases into NMDs and not -NMDs. However, these keywords can be modified to adapt the workflow to the study of other diseases.  
+**OMIM:** was searched with keywords describing NMDs. At the begining of *lauch_omim_build_networks.sh* script, there is a line where kewords are specified:
+  
+```
+#INPUT DATA (LIST OF KEYWORDS SEPARATE BY "\n") 
+echo -e "MUSCULAR DYSTROPHY\nMYOPATHY\nMYASTHENIC\nMYASTHENIA\nNEUROPATHY\nAMYOTROPHIC LATERAL SCLEROSIS\nSPINAL MUSCULAR ATROPHY\nSPINAL AND BULBAR MUSCULAR ATROPHY\nMYOTONIA\nPERIODIC PARALYSIS\nMYOTONIC DYSTROPHY\nMITOCHONDRIAL CYTOPATHY\nNECROTIZING ENCEPHALOMYELOPATHY\nMITOCHONDRIAL DNA DEPLETION" > external_data/all_diseases_patterns
+```  
+  
+If you want to study other diseases you only have to add your keywords in this line separated by "\n".  
+  
+**Orphanet:** organises diseases based on the ORDO ontology (Vasant et al., 2014) and NMDs can be retrieved using Genetic neuromuscular disease (Orphanet:183497). As ORDO is organized as an acyclic graph we need a script to look for NMDs. This is a part of *lauch_omim_build_networks.sh* script:  
+  
+```
+get_orphanet_diseases.py -o external_data/orphanet_ordo.obo -s "Orphanet:183497" | sort -u > processed_data/Orphanet/all_orphanet_list_neuromuscular_diseases
+```
+  
+You can change the term "Orphanet:183497" to the Orphanet term you want to study.  
+  
 ### Make PATH accesible all the installed software.
   
 As different programming language are used, the path must be made accessible for all installed software (R, python, Ruby, NetAnalyzer y Autoflow). You'll find in the workflow scripts a comment - LOAD XX in the places where it needs some path to a software.   
