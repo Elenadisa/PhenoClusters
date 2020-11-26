@@ -164,7 +164,7 @@ echo -e "MUSCULAR DYSTROPHY\nMYOPATHY\nMYASTHENIC\nMYASTHENIA\nNEUROPATHY\nAMYOT
   
 If you want to study other diseases you only have to add your keywords in this line separated by "\n".  
   
-**Orphanet:** organises diseases based on the ORDO ontology (Vasant et al., 2014) and NMDs can be retrieved using Genetic neuromuscular disease (Orphanet:183497). As ORDO is organized as an acyclic graph we need a script to look for NMDs. This is a part of *lauch_omim_build_networks.sh* script:  
+**Orphanet:** organises diseases based on the ORDO ontology (Vasant et al., 2014) and NMDs can be retrieved using Genetic neuromuscular disease (Orphanet:183497). As ORDO is organized as an acyclic graph we need a script to look for NMDs. This is a part of *lauch_orphanet_build_networks.sh* script:  
   
 ```
 get_orphanet_diseases.py -o external_data/orphanet_ordo.obo -s "Orphanet:183497" | sort -u > processed_data/Orphanet/all_orphanet_list_neuromuscular_diseases
