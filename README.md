@@ -5,7 +5,7 @@ PhenoCluster is a workflow built in Autoflow that enables the user to search for
   
 ## Systems Requirements
   
-The flow is programmed into several languages they need. In addition, for each language you will need to install their corresponding bookries (see Installation in Linux section). Finally it will be necessary to download scripts from the group repository [sys_bio_lab](https://github.com/seoanezonjic/sys_bio_lab_scripts/tree/65d5dfd061e624f57f7a48b59af997c50e6b6a27).  
+The flow is programmed into several languages they need. In addition, for each language you will need to install their corresponding librarys (see Installation in Linux section). Finally it will be necessary to download scripts from the group repository [sys_bio_lab](https://github.com/seoanezonjic/sys_bio_lab_scripts/tree/65d5dfd061e624f57f7a48b59af997c50e6b6a27).  
   
 ### Programming Languages
   
