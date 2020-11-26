@@ -30,7 +30,7 @@ group_cluster_information <- function(df1, df2){
         }else{
             groups[["coherence_score"]] <- 0
         }
-    name <- paste0("Cluster_#_", i)
+    name <- paste0("Cluster_#", i)
         cluster_list[[name]] <- groups 
   }
 
@@ -190,11 +190,11 @@ colnames(clusters_file) <- c("HPO-A", "HPO-B", "Cluster")
 for(i in 1:length(ordered_cluster_lst)){
     list <- ordered_cluster_lst[[i]]
     cluster_name <- unlist(strsplit(names(ordered_cluster_lst[i]), "_"))
-    cluster_number <- cluster_name[3]
+    cluster_number <- unlist(strsplit(names(ordered_cluster_lst[i]), "#"))[2]
     if(!is.null(list[["system"]])){
       cat("_ _ _", "\n", "_ _ _", "\n", "_ _ _", "\n")
       list["coherence_score"] <- NULL
-      cat("# ", cluster_name, "\n")
+      cat("# ", cluster_name, "\n", "\n")
 
       cluster <- subset(clusters_file, Cluster == cluster_number)
       hpo_names <- subset(clusters_hpo, Cluster == cluster_number)
@@ -211,11 +211,11 @@ for(i in 1:length(ordered_cluster_lst)){
 for(i in 1:length(ordered_cluster_lst)){
     list <- ordered_cluster_lst[[i]]
     cluster_name <- unlist(strsplit(names(ordered_cluster_lst[i]), "_"))
-    cluster_number <- cluster_name[3]
+    cluster_number <- unlist(strsplit(names(ordered_cluster_lst[i]), "#"))[2]
     if(is.null(list[["system"]])){
       cat("_ _ _", "\n", "_ _ _", "\n", "_ _ _", "\n")
       list["coherence_score"] <- NULL
-      cat("# ", cluster_name, "\n")
+      cat("# ", cluster_name, "\n", "\n")
 
       cluster <- subset(clusters_file, Cluster == cluster_number)
       hpo_names <- subset(clusters_hpo, Cluster == cluster_number)
