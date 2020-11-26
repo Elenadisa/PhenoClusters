@@ -94,7 +94,8 @@ They execute an autoflow template *build_networks.af*.
 **II.b launch_orphanet_analayse_network.sh**: perform phenotype cluster analysis.   
 They execute an autoflow template *analyse_network.af*.   
 
-**II get_reports.sh**: generates html reports with workflow results.
+**III.a get_omim_reports.sh**: generates html reports with workflow results for OMIM analysis.  
+**III.b get_orphanet_reports.sh**: generates html reports with workflow results for Orphanet analysis.  
 
 ### Defining input/output paths. 
 
