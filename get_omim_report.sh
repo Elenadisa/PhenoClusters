@@ -18,8 +18,8 @@ mkdir results
 
 
 
-omim_build_results_source=PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/build_networks/OMIM
-omim_analysed_results_source=PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/omim_analysed_networks
+omim_build_results_source=PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/OMIM
+omim_analysed_results_source=PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM
 
 
 #Clusters Results

@@ -3,6 +3,7 @@
 #LOAD R AND PYTHON
 module load python/anaconda-3_440
 module load R/4.0.2
+module load ruby/2.4.1
 
 current_dir=`pwd`
 
@@ -86,9 +87,9 @@ non_neuro_freq=/mnt/home/users/bio_267_uma/elenads/projects/neuromuscular_diseas
 
 
 #PATH TO THE DIRECTORY WHERE TO SAVE THE RESULTS
-mkdir /PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project
-mkdir /PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/build_networks
-mkdir /PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/build_networks/Orphanet
+mkdir PATH_TO_OUTPUT_FILES/PhenoClusters
+mkdir PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks
+mkdir PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/Orphanet
 
 
 
@@ -116,5 +117,5 @@ variables=`echo -e "
 
 " | tr -d [:space:]`
 
-AutoFlow -w build_networks.af -o /PATH/TO/OUTPUT/FILES//neuromuscular_diseases_project/build_networks/Orphanet -V $variables -m 2gb $1 -n cal -t '10:00:00'
-#AutoFlow -w build_networks.af -o /PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/build_networks/Orphanet -V $variables -m 8gb $1 -n cal -t '10:00:00'
+AutoFlow -w build_networks.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/Orphanet -V $variables -m 2gb $1 -n cal -t '10:00:00'
+#AutoFlow -w build_networks.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/Orphanet -V $variables -m 8gb $1 -n cal -t '10:00:00'

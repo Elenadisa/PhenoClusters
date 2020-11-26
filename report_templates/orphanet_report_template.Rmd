@@ -458,7 +458,7 @@ In this section we include Orphanet neuromuscular cluster's  details.
 ```{r  cho=FALSE, warning=FALSE, message=FALSE, results='asis'}
 
 
-clusters_hpo <- read.table("~/neuromuscular_diseases_project/orphanet_analysed_networks/NMDs/clustering.R_0000/clusters_file_with_names", sep ="\t", quote="", stringsAsFactors = FALSE, header = TRUE)
+clusters_hpo <- read.table("~/PhenoClusters/analysed_networks/Orphanet/NMDs/clustering.R_0000/clusters_file_with_names", sep ="\t", quote="", stringsAsFactors = FALSE, header = TRUE)
 colnames(clusters_hpo) <- c("HPO", "Cluster", "Description")
 if(nrow(clusters_hpo) > 0){
     for (i in 1:length(clusters_hpo$HPO)){
@@ -468,7 +468,7 @@ if(nrow(clusters_hpo) > 0){
   }
 
 
-kegg <- read.table("~/neuromuscular_diseases_project/orphanet_analysed_networks/NMDs/clusters_single_funsys_merger.py_0000/clusters_with_70_coherence_systems_kegg_0.05", sep ="\t", quote="", stringsAsFactors = FALSE, header = FALSE)
+kegg <- read.table("~/PhenoClusters/analysed_networks/Orphanet/NMDs/clusters_single_funsys_merger.py_0000/clusters_with_70_coherence_systems_kegg_0.05", sep ="\t", quote="", stringsAsFactors = FALSE, header = FALSE)
 colnames(kegg) <- c("Cluster", "Cell function", "Description", "Phenotype_coverage", "Genes")
 if(nrow(kegg) > 0){
     for (i in 1:length(kegg$"Cell function")){
@@ -477,7 +477,7 @@ if(nrow(kegg) > 0){
     }
   }
 
-go_df <- read.table("~/neuromuscular_diseases_project/orphanet_analysed_networks/NMDs/clusters_single_funsys_merger.py_0001/clusters_with_70_coherence_systems_go_0.05", sep ="\t", quote="", stringsAsFactors = FALSE, header = FALSE)
+go_df <- read.table("~/PhenoClusters/analysed_networks/Orphanet/NMDs/clusters_single_funsys_merger.py_0001/clusters_with_70_coherence_systems_go_0.05", sep ="\t", quote="", stringsAsFactors = FALSE, header = FALSE)
 colnames(go_df) <- c("Cluster", "Cell function", "Description", "Phenotype_coverage", "Genes")
 go <- delete_parental_terms(go_df)
 if(nrow(go) > 0){  
@@ -487,7 +487,7 @@ if(nrow(go) > 0){
     }
   }
 
-reactome <- read.table("~/neuromuscular_diseases_project/orphanet_analysed_networks/NMDs/clusters_single_funsys_merger.py_0002/clusters_with_70_coherence_systems_reactome_0.05", sep ="\t", quote="", stringsAsFactors = FALSE, header = FALSE)
+reactome <- read.table("~/PhenoClusters/analysed_networks/Orphanet/NMDs/clusters_single_funsys_merger.py_0002/clusters_with_70_coherence_systems_reactome_0.05", sep ="\t", quote="", stringsAsFactors = FALSE, header = FALSE)
 colnames(reactome) <- c("Cluster", "Cell function", "Description", "Phenotype_coverage", "Genes")
 if(nrow(reactome) > 0){  
     for (i in 1:length(reactome$"Cell function")){
@@ -504,7 +504,7 @@ ordered_cluster_lst <- order_a_list_by_vector(all_clusters_lst, "coherence_score
 
 
 #clusters_file
-clusters_file_cytoscape <- read.table("~/neuromuscular_diseases_project/orphanet_analysed_networks/NMDs/clustering.R_0000/cytoscape_file", sep=" ", header=FALSE, quote="", stringsAsFactors = FALSE)
+clusters_file_cytoscape <- read.table("~/PhenoClusters/analysed_networks/Orphanet/NMDs/clustering.R_0000/cytoscape_file", sep=" ", header=FALSE, quote="", stringsAsFactors = FALSE)
 clusters_file <- clusters_file_cytoscape[,c(1,3,5)]
 colnames(clusters_file) <- c("HPO-A", "HPO-B", "Cluster")
 

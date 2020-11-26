@@ -18,8 +18,8 @@ export PATH=$current_dir'/scripts/rscripts:'$PATH
 mkdir results
 
 
-orphanet_build_results_source=/PATH/TO/OUTPUT/FILES//neuromuscular_diseases_project/build_networks/Orphanet
-orphanet_analysed_results_source=PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/orphanet_analysed_networks
+orphanet_build_results_source=PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/Orphanet
+orphanet_analysed_results_source=PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/Orphanet
 
 
 																	#Orphanet Results

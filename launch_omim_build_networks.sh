@@ -3,7 +3,7 @@
 #LOAD PYTHON AND R
 module load python/anaconda-3_440
 module load /R/4.0.2
-
+module load ruby/2.4.1
 
 export PATH=$current_dir'/scripts/ruby_scripts:'$PATH
 export PATH=$current_dir'/scripts/py_scripts:'$PATH
@@ -95,9 +95,9 @@ non_neuro_freq=$current_dir'/processed_data/OMIM/non_neuromuscular_omim_diseases
 
 #OUTPUT
 
-mkdir PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project
-mkdir PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/build_networks
-mkdir PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/build_networks/OMIM
+mkdir PATH_TO_OUTPUT_FILES/PhenoClusters
+mkdir PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks
+mkdir PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/OMIM
 
 
 #AUTOFLOW VARIABLES
@@ -124,5 +124,5 @@ variables=`echo -e "
 
 " | tr -d [:space:]`
 
-AutoFlow -w build_networks.af -o PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/build_networks/OMIM -V $variables -m 2gb $1 -n cal -t '10:00:00'
-#AutoFlow -w build_networks.af -o PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/build_networks/OMIM -V $variables -m 8gb $1 -n cal -t '10:00:00'
+AutoFlow -w build_networks.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/OMIM -V $variables -m 2gb $1 -n cal -t '10:00:00'
+#AutoFlow -w build_networks.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/OMIM -V $variables -m 8gb $1 -n cal -t '10:00:00'

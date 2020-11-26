@@ -105,40 +105,40 @@ User have to define input/output paths in launch scripts:
 *Output*.   
 User need to define data output path in 
 ``
-PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/build_networks/OMIM 
+PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/OMIM 
 ``
 **I.b launch_orphanet_build_networks.sh**.   
 
 *Output*.   
 User need to define data output path in 
 ``
-PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/build_networks/Orphanet
+PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/Orphanet
 ``
   
 **II.a launch_omim_analyse_networks.sh**    
 *Input*.   
 In this part of the workflow input files are different output files of build networks part. Defining data path 
 ``
-data_source=PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/build_networks/OMIM
+data_source=PATH_TO_INPUT_FILES/PhenoClusters/build_networks/OMIM
 ``
 all needed files are accesibles.  
 *Output*.   
 User need to define data output path in: 
 ``
-PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/omim_analysed_networks
+PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM
 ``
 
 **II.b launch_orpjanet_analyse_networks.sh**    
 *Input*.   
 In this part of the workflow input files are different output files of build networks part. Defining data path 
 ``
-data_source=PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/build_networks/Orphanet
+data_source=PATH_TO_OUTPUT_FILES/Phenoclusters/build_networks/Orphanet
 ``
 all needed files are accesibles.  
 *Output*.   
 User need to define data output path in 
 ``
-PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/orphanet_analysed_networks
+PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/Orphanet
 ``
 line of launch_analyse_networks.sh. 
 
@@ -146,10 +146,10 @@ line of launch_analyse_networks.sh.
 *Input*.   
 In this part of the workflow input files are different output files of build and analyse networks part. User need to define paths for analyse networks results for OMIM or Orphanet in 
 ``
-omim_build_results_source=PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/build_networks/OMIM  
-omim_analysed_results_source=PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/omim_analysed_networks  
-orphanet_build_results_source=/PATH/TO/OUTPUT/FILES//neuromuscular_diseases_project/build_networks/Orphanet  
-orphanet_analysed_results_source=PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/orphanet_analysed_networks  
+omim_build_results_source=PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/OMIM  
+omim_analysed_results_source=PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM  
+orphanet_build_results_source=PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/Orphanet  
+orphanet_analysed_results_source=PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/Orphanet  
 ``
 
 ### Defining Keywords

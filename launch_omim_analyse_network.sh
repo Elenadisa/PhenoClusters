@@ -5,14 +5,12 @@
 current_dir=`pwd`
 
 
-framework_dir=`dirname $0`
-export CODE_PATH=$(readlink -f $framework_dir )
-export PATH=$CODE_PATH'/sys_bio_lab_scripts:'$PATH
 export PATH=$CODE_PATH'/scripts/py_scripts:'$PATH
 export PATH=$CODE_PATH'/scripts/rscripts:'$PATH
+export PATH=$CODE_PATH'/scripts/ruby_scripts:'$PATH
 
 #PATH TO build_networks.sh RESULTS
-data_source=PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/build_networks/OMIM
+data_source=PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/OMIM
 
 #PATH TO DIRECTORY WITH PAIRS LISTS
 networks_source=$data_source"/ln_0000/working_networks"
@@ -29,13 +27,12 @@ hpo_dictionary=$current_dir'/processed_data/hpo_dictionary'
 phen2gene=$data_source'/cut_0000/test/phen2gene_HyI_2.txt'
 
 
-# LOAD AUTOFLOW
-source ~PATH/TO/init_autoflow
 
 ls $networks_source > omim_working_nets
 
 ## PATH TO THE DIRECTORY WHERE TO SAVE THE RESULTS
-mkdir PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/omim_analysed_networks
+mkdir PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks
+mkdir PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM
 
 
 
@@ -61,7 +58,7 @@ do
 
 	" | tr -d [:space:]`
 	
-	AutoFlow -w analyse_networks.af -o PATH/TO/OUTPUT/FILES//neuromuscular_diseases_project/omim_analysed_networks/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
+	AutoFlow -w analyse_networks.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
 	
 done < omim_working_nets
 
@@ -80,10 +77,10 @@ awk -F"\t" '{print $3"\t"$2}' $go_funsys | sort -u > processed_data/OMIM/go_omim
 awk -F"\t" '{print $3"\t"$2}' $reactome_funsys | sort -u > processed_data/OMIM/reactome_omim_nmd_funsys
 
 
-mkdir PATH/TO/OUTPUT/FILES//neuromuscular_diseases_project/omim_analysed_networks/comention
-mkdir PATH/TO/OUTPUT/FILES//neuromuscular_diseases_project/omim_analysed_networks/comention/kegg
-mkdir PATH/TO/OUTPUT/FILES//neuromuscular_diseases_project/omim_analysed_networks/comention/go
-mkdir PATH/TO/OUTPUT/FILES//neuromuscular_diseases_project/omim_analysed_networks/comention/reactome
+mkdir PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM/comention
+mkdir PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM/comention/kegg
+mkdir PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM/comention/go
+mkdir PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM/comention/reactome
 
 
 
@@ -114,7 +111,7 @@ do
 
 	" | tr -d [:space:]`
 	
-	AutoFlow -w comention_analysis.af -o PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/omim_analysed_networks/comention/kegg/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
+	AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM/comention/kegg/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
 	
 done < omim_kegg_relationships
 
@@ -141,7 +138,7 @@ do
 		
 	" | tr -d [:space:]`
 	
-	AutoFlow -w comention_analysis.af -o PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/omim_analysed_networks/comention/go/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
+	AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM/comention/go/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
 	
 done < omim_go_relationships
 
@@ -168,6 +165,6 @@ do
 
 	" | tr -d [:space:]`
 	
-	AutoFlow -w comention_analysis.af -o PATH/TO/OUTPUT/FILES/neuromuscular_diseases_project/omim_analysed_networks/comention/reactome/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
+	AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM/comention/reactome/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
 	
 done < omim_reactome_relationships
