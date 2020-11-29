@@ -1,7 +1,7 @@
 # PhenoClusters Version 1.0
   
   
-PhenoCluster is a workflow built in Autoflow that enables the user to search for clusters of co-occurrent phenotypes diseases. It combines this phenotypic and genetic data to also detect shared genes and underlying functional systems. The workflow uses diseases data to connect HPO phenotypes and calculates the significance of the overlap. It then compares the resultant pairs with scientific literature using co-mention analysis. By incorporating genetic data, it also assigns genes to these phenotypes and performs enrichment analysis for biological functions. Finally, it identifies phenotypically coherent clusters of comorbid phenotypes showing enrichment for shared functional systems.
+PhenoCluster is a workflow built in Autoflow that enables the user to search for clusters of co-occurrent phenotypes diseases. It combines this phenotypic and genetic data to also detect shared genes and underlying biological functions. The workflow uses diseases data to connect HPO phenotypes and calculates the significance of the overlap. It then compares the resultant pairs with scientific literature using co-mention analysis. By incorporating genetic data, it also assigns genes to these phenotypes and performs functional assignment for biological functions. Finally, it identifies phenotypically coherent clusters of comorbid phenotypes showing enrichment for shared biological functions.
   
 ## Systems Requirements
   
@@ -77,7 +77,8 @@ create_report.R (save it in scripts/rscripts)
   
 **- Autoflow templates:** There are six main scripts programmed in bash (.sh) with their correspond autoflow template (.af). These scripts are located in the main directory. (1) *lauch_omim_build_networks.sh* to generate phenotype-phenotype pairs from OMIM diseases and the genes corresponding to these phenotypes, while *lauch_orphanet_build_networks.sh* do the same for Orphanet database; (2) *launch_omim_analayse_network.sh* to clusterise OMIM phenotypes and *launch_orphanet_analayse_network.sh* to clusterise Orphanet phenotypes; and (3) *get_omim_report.sh* generates the ready-to-use html graphical report for data from OMIM, while *get_orphanet_reports.sh* do the same for Orphanet results.
 
-**- Scripts:** Script directory contain the script that will be executed allong the workflow. There is a directory for each programming language used (Python (/py_scripts), R (/rscript), ruby (ruby_scripts)).  
+**- Scripts:** Script directory contain the script that will be executed allong the workflow. There is a directory for each programming language used (Python (/py_scripts), R (/rscript), ruby (ruby_scripts)).
+    
 **-Report_templates:** Directory which contain RMarkdown report templates to obtain the results of executing different parts of the workflow.  
 
   
