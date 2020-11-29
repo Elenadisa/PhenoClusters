@@ -118,9 +118,9 @@ PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/Orphanet
   
 **II.a launch_omim_analyse_networks.sh**    
 *Input*.   
-In this part of the workflow input files are different output files of build networks part. Defining data path 
+In this part of the workflow input files are different output files of build networks part. Defining data path: 
 ```
-data_source=PATH_TO_INPUT_FILES/PhenoClusters/build_networks/OMIM
+data_source=PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/OMIM
 ```
 all needed files are accesibles.  
 *Output*.   
