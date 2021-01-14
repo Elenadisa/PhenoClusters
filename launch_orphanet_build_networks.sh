@@ -18,9 +18,13 @@ mkdir processed_data/results
 
 																	## DOWNLOAD DATASETS // INPUT FILES
 
+## Generated: 2019-11-15
 wget http://compbio.charite.de/jenkins/job/hpo.annotations/lastStableBuild/artifact/misc/phenotype_annotation.tab -O external_data/phenotype_annotation.tab
+## Generated: 2019-11-15
 wget http://compbio.charite.de/jenkins/job/hpo.annotations.monthly/159/artifact/annotation/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt -O external_data/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt
+## format-version: 1.2
 curl http://data.bioontology.org/ontologies/ORDO_OBO/submissions/1/download?apikey=8b5b7825-538d-40e0-9e9e-5ab9274a9aeb > external_data/orphanet_ordo.obo
+## format-version: 1.2
 wget https://raw.githubusercontent.com/obophenotype/human-phenotype-ontology/master/hp.obo -O external_data/hp.obo
 
 cut -f 4,5 external_data/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt | sort -u > processed_data/hpo_dictionary

@@ -18,9 +18,13 @@ mkdir results
 
 																	## DOWNLOAD DATASETS // INPUT FILES
 
+## Generated: 2020-02-16
 curl https://data.omim.org/downloads/B8yyAwLuSOyA5G3vHOIfIg/mimTitles.txt > external_data/mimTitles.txt
+## Generated: 2019-11-15
 wget http://compbio.charite.de/jenkins/job/hpo.annotations/lastStableBuild/artifact/misc/phenotype_annotation.tab -O external_data/phenotype_annotation.tab
+## Generated: 2019-11-15
 wget http://compbio.charite.de/jenkins/job/hpo.annotations.monthly/159/artifact/annotation/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt -O external_data/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt
+## format-version: 1.2
 wget https://raw.githubusercontent.com/obophenotype/human-phenotype-ontology/master/hp.obo -O external_data/hp.obo
 
 cut -f 4,5 external_data/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt | sort -u > processed_data/hpo_dictionary
