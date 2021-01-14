@@ -48,7 +48,7 @@ pip3 install optparse-pretty numpy os.path2
 **VI** Instal [R](https://cloud.r-project.org/). The following R packages must also be installed:  
 
 ```
-install.packages(c('optparse', 'ggplot2', 'dplyr', 'reshape', 'knitr', 'linkcomm', 'igraph', 'kableExtra', 'rmarkdown', 'BiocManager', 'HPOSim', 'HPO.db'))
+install.packages(c('optparse', 'ggplot2', 'dplyr', 'reshape', 'knitr', 'linkcomm', 'igraph', 'kableExtra', 'rmarkdown', 'BiocManager'))
 ``` 
 
 Furthermore, these bioconductor packages should be installed using the the BiocManager package
