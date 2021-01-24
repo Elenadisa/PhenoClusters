@@ -1,6 +1,6 @@
 build_phen_phen_network){
 	# LOAD RUBY NETANALYSER AND PYTHON
-	module load ruby/2.3.8
+	module load ruby/2.4.1
 	source ~PATH/TO/init_netanalyzer
 	module load python/anaconda-3_440
 	PATH=$current_dir'/scripts/py_scripts':$PATH
@@ -152,7 +152,6 @@ single_term_enrichment_analysis_[kegg;go;reactome]){
 }
 
 
-}
 
 collect_single_enrichment_analysis){
 	rm -rf enrichments
