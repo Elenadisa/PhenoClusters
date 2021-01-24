@@ -4,9 +4,9 @@
 current_dir=`pwd`
 
 
-export PATH=$CODE_PATH'/scripts/py_scripts:'$PATH
-export PATH=$CODE_PATH'/scripts/rscripts:'$PATH
-export PATH=$CODE_PATH'/scripts/ruby_scripts:'$PATH
+export PATH=$current_dir'/scripts/py_scripts:'$PATH
+export PATH=$current_dir'/scripts/rscripts:'$PATH
+export PATH=$current_dir'/scripts/ruby_scripts:'$PATH
 
 
 #PATH TO build_networks.sh RESULTS
@@ -40,6 +40,7 @@ mkdir PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/Orphanet
 
 
 																						#CLUSTER COHERENT ANALYSIS
+source ~PATH/TO/init_autoflow
 
 # PREPARE VARIABLES NEEDED IN analyse_networks.af
 #\\$p_values=0.05/0.001/0.00001,
