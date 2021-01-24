@@ -5,9 +5,9 @@
 current_dir=`pwd`
 
 
-export PATH=$CODE_PATH'/scripts/py_scripts:'$PATH
-export PATH=$CODE_PATH'/scripts/rscripts:'$PATH
-export PATH=$CODE_PATH'/scripts/ruby_scripts:'$PATH
+export PATH=$current_dir'/scripts/py_scripts:'$PATH
+export PATH=$current_dir'/scripts/rscripts:'$PATH
+export PATH=$current_dir'/scripts/ruby_scripts:'$PATH
 
 #PATH TO build_networks.sh RESULTS
 data_source=PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/OMIM
@@ -39,6 +39,7 @@ mkdir PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM
 
 																						#CLUSTER COHERENT ANALYSIS
 
+source ~PATH/TO/init_autoflow
 
 # PREPARE VARIABLES NEEDED IN analyse_networks.af
 #\\$p_values=0.05/0.001/0.00001,
@@ -49,7 +50,7 @@ do
 		\\$current_dir=$current_dir,
 		\\$hpo_dictionary=$hpo_dictionary,
 		\\$single_enrichments=$enrichment_files,
-		\\$p_values=0.050.05/0.001/0.00001,
+		\\$p_values=0.05/0.001/0.00001,
 		\\$database=OMIM,
 		\\$all_diseases_data=$all_diseases_data,
 		\\$HPO2pubmed=$HPO2pubmed,
