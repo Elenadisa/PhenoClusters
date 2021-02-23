@@ -50,7 +50,9 @@ pip3 install optparse-pretty numpy os.path2
   
 
 **VI** Instal [R](https://cloud.r-project.org/). The following R packages must also be installed:  
-
+  
+Start R in the terminal and install the packages:    
+  
 ```
 sudo -i R  
   
@@ -193,7 +195,9 @@ As different programming language are used, the path must be made accessible for
   
 In scripts directory there are other directorys in which the scripts needed for running the workflow. There are one directory for each programming language.  
 Make sure that the path accesible for the scripts directory in the different workflow parts.  
-  
+
+### Run Autoflow
+PhenCo can be executed in a SLURM queue system and in linux systems. Use the autoflow code line that suits you.  
   
 ## Execution
 
