@@ -27,8 +27,6 @@ all_diseases_data=$current_dir"/external_data/ALL_SOURCES_ALL_FREQUENCIES_diseas
 phen2gene=$data_source'/cut_0000/test/phen2gene_HyI_2.txt'
 
 
-# LOAD AUTOFLOW
-source ~PATH/TO/init_autoflow
 
 ls $networks_source > orphanet_working_nets
 
@@ -38,9 +36,9 @@ mkdir PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/Orphanet
 
 
 
-
-																						#CLUSTER COHERENT ANALYSIS
-source ~PATH/TO/init_autoflow
+																	#LOAD AUTOFLOW
+#CLUSTER COHERENT ANALYSIS
+#source ~PATH/TO/init_autoflow
 
 # PREPARE VARIABLES NEEDED IN analyse_networks.af
 #\\$p_values=0.05/0.001/0.00001,
@@ -60,12 +58,14 @@ do
 
 	" | tr -d [:space:]`
 	
-	AutoFlow -w analyse_networks.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/Orphanet/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
-	
+	#FOR SLURM SYSTEM 
+	#AutoFlow -w analyse_networks.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/Orphanet/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
+	#FOR LOCAL UNIX
+	#AutoFlow -w analyse_networks.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/Orphanet/$NETWORK -V $variables $1 -b
 done < orphanet_working_nets
 
 
-																#PHENOTYPE-FUNCTION PUBMED COMENTION ANALYSIS
+#PHENOTYPE-FUNCTION PUBMED COMENTION ANALYSIS
 
 
 kegg_funsys=$data_source'/enrich_by_onto.R_0000/enrich_kegg_single_0.05'
@@ -109,7 +109,10 @@ do
 
 	" | tr -d [:space:]`
 	
-	AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/Orphanet/comention/kegg/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
+	#FOR SLURM SYSTEM
+	#AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/Orphanet/comention/kegg/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
+	#FOR LOCAL UNIX
+	#AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/Orphanet/comention/kegg/$NETWORK -V $variables $1 -b
 	
 done < orphanet_kegg_relationships
 
@@ -138,7 +141,10 @@ do
 		
 	" | tr -d [:space:]`
 	
-	AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/Orphanet/comention/go/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
+	#FOR SLURM SYSTEM
+	#AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/Orphanet/comention/go/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
+	#FOR LOCAL UNIX
+	#AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/Orphanet/comention/go/$NETWORK -V $variables $1 -b
 	
 	
 done < orphanet_go_relationships
@@ -165,6 +171,9 @@ do
 
 	" | tr -d [:space:]`
 	
-	AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/Orphanet/comention/reactome/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
+	#FOR SLURM SYSTEM
+	#AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/Orphanet/comention/reactome/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
+	#FOR LOCAL UNIX
+	#AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/Orphanet/comention/reactome/$NETWORK -V $variables $1 -b
 	
 done < orphanet_reactome_relationships

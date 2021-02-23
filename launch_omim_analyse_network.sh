@@ -36,10 +36,9 @@ mkdir PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM
 
 
 
-
-																						#CLUSTER COHERENT ANALYSIS
-
-source ~PATH/TO/init_autoflow
+																			#LOAD AUTOFLOW
+#CLUSTER COHERENT ANALYSIS
+#source ~PATH/TO/init_autoflow
 
 # PREPARE VARIABLES NEEDED IN analyse_networks.af
 #\\$p_values=0.05/0.001/0.00001,
@@ -59,14 +58,15 @@ do
 
 	" | tr -d [:space:]`
 	
-	AutoFlow -w analyse_networks.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
+	#FOR SLURM SYSTEM
+	#AutoFlow -w analyse_networks.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
+	#FOR LOCAL UNIX
+	#AutoFlow -w analyse_networks.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM/$NETWORK -V $variables $1 -b
 	
 done < omim_working_nets
 
 
-
-
-																#PHENOTYPE-FUNCTION PUBMED COMENTION ANALYSIS
+#PHENOTYPE-FUNCTION PUBMED COMENTION ANALYSIS
 
 
 kegg_funsys=$data_source'/enrich_by_onto.R_0000/enrich_kegg_single_0.05'
@@ -112,7 +112,10 @@ do
 
 	" | tr -d [:space:]`
 	
-	AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM/comention/kegg/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
+	#FOR SLURM SYSTEM
+	#AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM/comention/kegg/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
+	#FOR LOCAL UNIX
+	#AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM/comention/kegg/$NETWORK -V $variables $1 -b
 	
 done < omim_kegg_relationships
 
@@ -139,7 +142,10 @@ do
 		
 	" | tr -d [:space:]`
 	
-	AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM/comention/go/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
+	#FOR SLURM SYSTEM
+	#AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM/comention/go/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
+	#FOR LOCAL UNIX
+	#AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM/comention/go/$NETWORK -V $variables $1 -b
 	
 done < omim_go_relationships
 
@@ -166,6 +172,8 @@ do
 
 	" | tr -d [:space:]`
 	
-	AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM/comention/reactome/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
-	
+	#FOR SLURM SYSTEM
+	#AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM/comention/reactome/$NETWORK -V $variables $1 -m 2gb -t '7-00:00:00' -n 'cal'
+	#FOR LOCAL UNIX
+	#AutoFlow -w comention_analysis.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/analysed_networks/OMIM/comention/reactome/$NETWORK -V $variables $1 -b
 done < omim_reactome_relationships

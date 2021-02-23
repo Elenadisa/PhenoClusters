@@ -109,6 +109,8 @@ mkdir PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/OMIM
 #\\$p_values=0.05/0.001/0.00001,
 
 # LOAD AUTOFLOW
+#source ~PATH/TO/init_autoflow
+
 
 variables=`echo -e "
 	\\$database=OMIM,
