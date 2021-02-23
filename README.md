@@ -196,10 +196,10 @@ As different programming language are used, the path must be made accessible for
 In scripts directory there are other directorys in which the scripts needed for running the workflow. There are one directory for each programming language.  
 Make sure that the path accesible for the scripts directory in the different workflow parts.  
 
-### Run Autoflow
+## Run Autoflow
 PhenCo can be executed in a SLURM queue system and in linux systems. Use the autoflow code line that suits you.  
   
-## Execution
+### Execution
 
 PhenoClusters workflow consists of different scripts that execute Autoflow templates that will serve to extract and analyze information from two different databases, OMIM and Orphanet. These scripts/templates are located in the main directory. Autoflow templates will execute different scripts located in their corresponding directory. 
 
