@@ -1,4 +1,5 @@
-BATCH --cpu=1
+#! /usr/bin/env bash
+#BATCH --cpu=1
 #SBATCH --mem=4gb
 #SBATCH --time=1-00:00:00
 #SBATCH --error=job.%J.err
