@@ -1,7 +1,6 @@
 topolological_analysis){
 	#LOAD 
 	module load  R/4.0.2
-
 	PATH=$current_dir'/scripts/rscripts':$PATH
 	export PATH
 	net_name=`basename $working_net`
@@ -72,7 +71,6 @@ analyse_clusters_[kegg;go;reactome]){
 }
 
 unify_clusters_data){
-	
 	net_name=`basename $working_net`
 	net_type=`echo $net_name | sed 's/_[0-9]*$//g'`
 	parsed_p_values=`echo '$p_values' | tr '/' ' '`
