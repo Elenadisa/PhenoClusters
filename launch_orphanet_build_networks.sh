@@ -102,7 +102,7 @@ mkdir PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/Orphanet
 #\\$p_values=0.05/0.001/0.00001,
 
 # LOAD AUTOFLOW
-source ~PATH/TO/init_autoflow
+#source ~PATH/TO/init_autoflow
 
 variables=`echo -e "
 	\\$database=Orphanet,
@@ -121,5 +121,9 @@ variables=`echo -e "
 
 " | tr -d [:space:]`
 
-AutoFlow -w build_networks.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/Orphanet -V $variables -m 2gb $1 -n cal -t '10:00:00'
+#FOR SLURM SYSTEMS
+#AutoFlow -w build_networks.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/Orphanet -V $variables -m 2gb $1 -n cal -t '10:00:00'
 #AutoFlow -w build_networks.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/Orphanet -V $variables -m 8gb $1 -n cal -t '10:00:00'
+
+#FOR LOCAL UNIX
+#AutoFlow -w build_networks.af -o PATH_TO_OUTPUT_FILES/PhenoClusters/build_networks/Orphanet -V $variables -b
