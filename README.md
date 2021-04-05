@@ -42,7 +42,7 @@ sudo apt -y upgrade
   
 sudo apt install -y python3-pip  
   
-pip3 install optparse-pretty numpy os.path2  
+pip3 install optparse-pretty numpy os.path2 pandas scipy 
   
 ``` 
   
