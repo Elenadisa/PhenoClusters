@@ -216,3 +216,5 @@ Autoflow templates have to be executed in a certain order:
 ***IIIb***./get_orphanet_reports.sh.  
   
 ## Citation
+  
+Decoding Neuromuscular Disorders Using Phenotypic Clusters Obtained From Co-Occurrence Networks. Díaz-Santiago E, Claros MG, Yahyaoui R, de Diego-Otero Y, Calvo R, Hoenicka J, Palau F, Ranea JAG and Perkins JR (2021)Front. Mol. Biosci. 8:635074. doi: 10.3389/fmolb.2021.635074.
