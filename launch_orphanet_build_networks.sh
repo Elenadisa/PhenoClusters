@@ -43,8 +43,7 @@ cut -f 2  processed_data/Orphanet/orphanet_dictionary | sort -u > processed_data
 
 
 #Get neuromuscular diseases
-
-get_orphanet_diseases.py -o external_data/orphanet_ordo.obo -s "Orphanet:183497" | sort -u > processed_data/Orphanet/all_orphanet_list_neuromuscular_diseases
+get_orphanet_diseases.py -o external_data/orphanet_ordo.obo -s "Orphanet:183497" | sort -u >processed_data/Orphanet/all_orphanet_list_neuromuscular_diseases
 echo -e "Total_Orphanet_NMD\t`cut -f 1 processed_data/Orphanet/all_orphanet_list_neuromuscular_diseases | sort -u | wc -l`" >> results/orphanet_summary
 
 parse_diseases.py -d processed_data/Orphanet/orphanet_list_neuromuscular_diseases -n external_data/ALL_SOURCES_ALL_FREQUENCIES_diseases_to_genes_to_phenotypes.txt -b 0 -y 3 -t "ORPHA" | sort -u > processed_data/Orphanet/orphanet_neuromuscular_disease2phen
