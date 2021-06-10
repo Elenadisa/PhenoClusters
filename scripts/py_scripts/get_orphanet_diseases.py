@@ -1,54 +1,47 @@
 #! /usr/bin/env python
 
-def build_dictionary(filename):
+def parse_ontology(filename):
 	file = open(filename)
-	category_dictionary = dict()
-	disease_dictionary = dict()
-	name_dictionary = dict()
+	parent_child_dict = dict()
+	name_dict = dict()
+	disease_dict = dict()
 	
 	for line in file:
 		line = line.rstrip("\n")
 		fields = line.split(": ")
 		
 		if fields[0] == "id" :
-			child = fields[1]
-			if child not in name_dictionary:
-				name_dictionary[child] = []
-		
+			term = fields[1]
+			if term not in name_dict:
+				name_dict[term] = []
+
 		elif fields[0] == "name" :
 			name = fields[1]
-			name_dictionary[child].append(name)
+			name_dict[term].append(name)
 
-			
 		elif fields[0] == "is_a":
-			parental_line = fields[1]
-			parental_fields = parental_line.split(" ")
-			parental = parental_fields[0]
-			if parental not in category_dictionary:
-				category_dictionary[parental] = []
-				category_dictionary[parental].append(child)
+			parent_line = fields[1]
+			parent_fields = parent_line.split(" ")
+			parent_term = parent_fields[0]
+			if parent_term not in parent_child_dict:
+				parent_child_dict[parent_term] = []
+				parent_child_dict[parent_term].append(term)
 			else:
-				category_dictionary[parental].append(child)
-		
+				parent_child_dict[parent_term].append(term)
+
 		elif fields[0] == "relationship":
 			category_line = fields[1]
 			category_line = category_line.split(" ")
 			
 			if str(category_line[0]) == "part_of":
 				class_id = category_line[1]
-				if class_id not in disease_dictionary:
-					disease_dictionary[class_id] = []
-					disease_dictionary[class_id].append(child)
+				if class_id not in disease_dict:
+					disease_dict[class_id] = []
+					disease_dict[class_id].append(term)
 				else:
-					disease_dictionary[class_id].append(child)
+					disease_dict[class_id].append(term)
 
-
-
-	#print(category_dictionary)
-	#print(disease_dictionary)
-	return(category_dictionary, disease_dictionary, name_dictionary)
-
-
+	return parent_child_dict, name_dict, disease_dict
 
 ##############################################################################################################################################
 #															OPTPARSE
@@ -66,46 +59,48 @@ parser.add_option("-s", "--id_to_find", dest="id_to_find",
 #															MEHTODS
 ##############################################################################################################################################
 
-term_child_dictionary, category_to_diseases_dictionary, name_dictionary = build_dictionary(options.obo_file)
+parent_child_dict, name_dict, disease_dict = parse_ontology(options.obo_file)
 
-neuromuscular_list = term_child_dictionary[options.id_to_find]
+#get a list of main terms
+query_list = options.id_to_find.split(",")
 
-new_list = neuromuscular_list.copy()
-new_terms = []
+#print(query_list)
 
-#print(type(neuromuscular_list))
-#print(neuromuscular_list)
+#look for direct child terms and diseases in which the main terms are involved
 
-for classification_id in new_list:
+for query in query_list:
+	if query in parent_child_dict:
+		query_childs_list = parent_child_dict[query]
+		new_terms = query_childs_list.copy()
+	else:
+		query_childs_list = []
+		new_terms = []
+
 	
-	if classification_id in term_child_dictionary:
-		neuromuscular_list.extend(term_child_dictionary[classification_id])
-		new_terms.extend(term_child_dictionary[classification_id])
+	#print(query_childs)
+	#print(disease_list)
 
-		#print(classification_id + "\t" + str(term_child_dictionary[classification_id]) +"\n" + "\n")
+	#look for hierchical child terms
+	while len(new_terms) != 0:
+		new_list = [] #list to store child terms
 
-#while we find new child terms
+		for term in new_terms:
+			if term in parent_child_dict:
+				query_childs_list.extend(parent_child_dict[term])
+				new_list.extend(parent_child_dict[term])
+			
+		new_terms = new_list.copy()
 
-while len(new_terms) != 0 :
-	new_list = []
+	id_final_list = query_list + list(set(query_childs_list))
 
-	for classification_id in new_terms:
-		if classification_id in term_child_dictionary:
-			neuromuscular_list.extend(term_child_dictionary[classification_id])
-			new_list.extend(term_child_dictionary[classification_id])
-			#print(classification_id + "\t" + str(term_child_dictionary[classification_id]) +"\n" + "\n")
-	new_terms = new_list.copy()
+	#print(id_final_list)
 
-category_final_list = list(set(neuromuscular_list.copy()))
-#print(final_list)
-
-for category in category_final_list:
+	for id_term in id_final_list:
 	
-	if category in category_to_diseases_dictionary:
-		#print(category + "\t" + str(category_to_diseases_dictionary[category]) + "\n" + "\n")
-		diseases = category_to_diseases_dictionary[category]
+		if id_term in disease_dict:
+			diseases = disease_dict[id_term]
 
-		for disease in diseases:
-			disease_name = name_dictionary[disease]
-			disease = disease.split(":")
-			print("ORPHA:" + disease[1], ",".join(disease_name), sep = "\t")
+			for disease in diseases:
+				disease_name = name_dict[disease]
+				disease = disease.split(":")
+				print("ORPHA:" + disease[1], ",".join(disease_name), sep = "\t")
