@@ -2,6 +2,11 @@
   
   
 PhenoCluster is a workflow built in Autoflow that enables the user to search for clusters of co-occurrent phenotypes diseases. It combines this phenotypic and genetic data to also detect shared genes and underlying biological functions. The workflow uses diseases data to connect HPO phenotypes and calculates the significance of the overlap. It then compares the resultant pairs with scientific literature using co-mention analysis. By incorporating genetic data, it also assigns genes to these phenotypes and performs functional assignment for biological functions. Finally, it identifies phenotypically coherent clusters of comorbid phenotypes showing enrichment for shared biological functions.
+
+## Authors
+-Juan Antonio García Ranea (IP).  
+-James Richard Perkins.  
+-Elena Dolores Díaz Santiago.  
   
 ## Systems Requirements
   
